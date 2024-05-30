@@ -2,9 +2,7 @@ version: '3.8'
 
 services:
   be:
-    build:
-      context: ./be
-      dockerfile: Dockerfile
+    image: ${DOCKER_USERNAME}/be_inner_peace
     ports:
       - "8080:8080"
     environment:

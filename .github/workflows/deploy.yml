@@ -40,10 +40,10 @@ jobs:
         id: docker_build
         with:
           context: ./
-          file: ./Dockerfile
+          file: ./be/Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE }}
+          tags: ${{ secrets.DOCKER_USERNAME }}/be_inner_peace
 
       - name: Verify
         run: echo ${{ steps.docker_build.outputs.digest }}
