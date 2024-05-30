@@ -7,8 +7,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
-    env_file:
-      - path: .env
-        required: true 
+    environment:
+      - JAVA_OPTS=-Xms512m -Xmx1024m
     restart: unless-stopped
     tty: true
