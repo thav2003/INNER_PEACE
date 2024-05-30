@@ -23,7 +23,7 @@ jobs:
           cache: "maven"
 
       - name: Build with Maven
-        run: mvn -B package --file pom.xml -DMYSQL_HOST=${{ secrets.MYSQL_HOST }} -DMYSQL_PORT=${{ secrets.MYSQL_PORT }} -DMYSQL_USER=${{ secrets.MYSQL_USER }} -DMYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} -DMYSQL_DB=${{ secrets.MYSQL_DB }}
+        run: mvn -B package --file ./be/pom.xml -DMYSQL_HOST=${{ secrets.MYSQL_HOST }} -DMYSQL_PORT=${{ secrets.MYSQL_PORT }} -DMYSQL_USER=${{ secrets.MYSQL_USER }} -DMYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} -DMYSQL_DB=${{ secrets.MYSQL_DB }}
 
       - name: Login Docker Hub
         uses: docker/login-action@v3
