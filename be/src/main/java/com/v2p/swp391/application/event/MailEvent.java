@@ -1,6 +1,5 @@
 package com.v2p.swp391.application.event;
 
-import com.v2p.swp391.application.model.User;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.context.ApplicationEvent;

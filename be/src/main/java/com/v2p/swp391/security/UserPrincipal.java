@@ -1,6 +1,6 @@
 package com.v2p.swp391.security;
 
-import com.v2p.swp391.application.model.User;
+import com.v2p.swp391.application.model.UserEntity;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -14,47 +14,47 @@ import java.util.Map;
 
 public class UserPrincipal implements OAuth2User, UserDetails {
     @Getter
-    private User user;
+    private UserEntity userEntity;
     private Collection<? extends GrantedAuthority> authorities;
     private Map<String, Object> attributes;
 
-    public UserPrincipal(User user, Collection<? extends GrantedAuthority> authorities) {
-        this.user = user;
+    public UserPrincipal(UserEntity userEntity, Collection<? extends GrantedAuthority> authorities) {
+        this.userEntity = userEntity;
         this.authorities = authorities;
     }
 
-    public static UserPrincipal create(User user) {
+    public static UserPrincipal create(UserEntity userEntity) {
         List<GrantedAuthority> authorities = Collections.
-                singletonList(new SimpleGrantedAuthority("ROLE_"+user.getRole()));
+                singletonList(new SimpleGrantedAuthority("ROLE_"+ userEntity.getRole()));
 
         return new UserPrincipal(
-                user,
+                userEntity,
                 authorities
         );
     }
 
-    public static UserPrincipal create(User user, Map<String, Object> attributes) {
-        UserPrincipal userPrincipal = UserPrincipal.create(user);
+    public static UserPrincipal create(UserEntity userEntity, Map<String, Object> attributes) {
+        UserPrincipal userPrincipal = UserPrincipal.create(userEntity);
         userPrincipal.setAttributes(attributes);
         return userPrincipal;
     }
 
     public Long getId() {
-        return user.getId();
+        return userEntity.getId();
     }
 
     public String getEmail() {
-        return user.getEmail();
+        return userEntity.getEmail();
     }
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return userEntity.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return user.getEmail();
+        return userEntity.getEmail();
     }
 
     @Override
@@ -93,6 +93,6 @@ public class UserPrincipal implements OAuth2User, UserDetails {
 
     @Override
     public String getName() {
-        return String.valueOf(user.getId());
+        return String.valueOf(userEntity.getId());
     }
 }

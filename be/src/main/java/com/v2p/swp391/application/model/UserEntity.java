@@ -1,15 +1,11 @@
 package com.v2p.swp391.application.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.v2p.swp391.common.enums.Role;
 import com.v2p.swp391.common.enums.SocialProvider;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
-
-import java.time.LocalDate;
-import java.util.List;
 
 @Getter
 @Setter
@@ -18,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "users")
-public class User  extends BaseEntity{
+public class UserEntity extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

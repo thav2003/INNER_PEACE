@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  be:
+    build:
+      context: ./be
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    env_file:
+      - path: .env
+        required: true 
+    restart: unless-stopped
+    tty: true

@@ -5,7 +5,7 @@ import com.v2p.swp391.application.request.ChangePasswordRequest;
 import com.v2p.swp391.common.constant.Image;
 import com.v2p.swp391.common.enums.Role;
 import com.v2p.swp391.exception.AppException;
-import com.v2p.swp391.application.model.User;
+import com.v2p.swp391.application.model.UserEntity;
 import com.v2p.swp391.application.repository.UserRepository;
 import com.v2p.swp391.application.request.LoginRequest;
 import com.v2p.swp391.application.request.SignUpRequest;
@@ -69,7 +69,7 @@ public class AuthService {
         );
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 
-        if(!userPrincipal.getUser().getIsActive()){
+        if(!userPrincipal.getUserEntity().getIsActive()){
             throw new AppException(HttpStatus.BAD_REQUEST,"User not active");
         }
 
@@ -83,26 +83,26 @@ public class AuthService {
 //                .refreshToken(refreshToken)
                 .role(userPrincipal.getAuthorities().iterator().next().getAuthority())
                 .userId(userPrincipal.getId())
-                .imageUrl(userPrincipal.getUser().getImageUrl())
+                .imageUrl(userPrincipal.getUserEntity().getImageUrl())
                 .build();
     }
 
     public void signUp(SignUpRequest request) {
-        Optional<User> userOptional = userRepository.findByEmail(request.getEmail());
+        Optional<UserEntity> userOptional = userRepository.findByEmail(request.getEmail());
         if(userOptional.isPresent()) {
             throw new AppException(HttpStatus.BAD_REQUEST,"Email address already in use.");
         }
 
         // Creating user's account
-        User user = new User();
-        user.setFullName(request.getFullName());
-        user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setImageUrl(Image.DEFAULT_AVATAR);
-        user.setRole(Role.CUSTOMER);
-        user.setPhoneNumber(request.getPhone());
-        user.setIsActive(true);
-        userRepository.save(user);
+        UserEntity userEntity = new UserEntity();
+        userEntity.setFullName(request.getFullName());
+        userEntity.setEmail(request.getEmail());
+        userEntity.setPassword(passwordEncoder.encode(request.getPassword()));
+        userEntity.setImageUrl(Image.DEFAULT_AVATAR);
+        userEntity.setRole(Role.CUSTOMER);
+        userEntity.setPhoneNumber(request.getPhone());
+        userEntity.setIsActive(true);
+        userRepository.save(userEntity);
     }
 
     public void generateOtp()
@@ -110,7 +110,7 @@ public class AuthService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 
-        if(!userPrincipal.getUser().getIsActive()){
+        if(!userPrincipal.getUserEntity().getIsActive()){
             throw new AppException(HttpStatus.UNAUTHORIZED,"User not login");
         }
 
@@ -126,16 +126,16 @@ public class AuthService {
         log.info("Generated OTP: {}", otpValue);
 
         // fetch user e-mail from database
-        User user = userRepository.findByEmail(userPrincipal.getEmail())
+        UserEntity userEntity = userRepository.findByEmail(userPrincipal.getEmail())
                 .orElseThrow(() ->new ResourceNotFoundException( "User", "email", userPrincipal.getEmail()));
 
         List<String> recipients = new ArrayList<>();
-        recipients.add(user.getEmail());
+        recipients.add(userEntity.getEmail());
 
         // generate emailDTO object
         MailEvent mailEvent = new MailEvent(this);
         mailEvent.setSubject("Spring Boot OTP Password.");
-        mailEvent.setBody(thymeleafService.getOTPContent(user,otpValue));
+        mailEvent.setBody(thymeleafService.getOTPContent(userEntity,otpValue));
 //        mailEvent.setBody("OTP Password: " + otpValue);
         mailEvent.setRecipients(recipients);
 
@@ -147,7 +147,7 @@ public class AuthService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 
-        if(!userPrincipal.getUser().getIsActive()){
+        if(!userPrincipal.getUserEntity().getIsActive()){
             throw new AppException(HttpStatus.UNAUTHORIZED,"User not login");
         }
 
@@ -177,13 +177,13 @@ public class AuthService {
         {
             throw new AppException(HttpStatus.BAD_REQUEST,"OTP is not valid!");
         }
-        User user = userRepository
+        UserEntity userEntity = userRepository
                 .findByEmail(request.getEmail())
                 .orElseThrow(()
                         -> new ResourceNotFoundException("User", "email", request.getEmail()));
 
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        userRepository.save(user);
+        userEntity.setPassword(passwordEncoder.encode(request.getPassword()));
+        userRepository.save(userEntity);
         otpGenerator.clearOTPFromCache(request.getEmail());
     }
 }

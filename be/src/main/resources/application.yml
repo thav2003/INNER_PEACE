@@ -4,7 +4,7 @@ server:
 spring:
 
   datasource:
-    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/thaodb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/${MYSQL_DB:thaodb}?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: ${MYSQL_USER:root}
     password: ${MYSQL_PASSWORD:03102003@Phuc}
     driver-class-name: com.mysql.cj.jdbc.Driver

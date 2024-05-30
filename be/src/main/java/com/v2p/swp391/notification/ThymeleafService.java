@@ -1,6 +1,6 @@
 package com.v2p.swp391.notification;
 
-import com.v2p.swp391.application.model.User;
+import com.v2p.swp391.application.model.UserEntity;
 import com.v2p.swp391.common.constant.Template;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Service;
@@ -46,10 +46,10 @@ public class ThymeleafService {
         return templateResolver;
     }
 
-    public String getOTPContent(User user, Integer otpnum) {
+    public String getOTPContent(UserEntity userEntity, Integer otpnum) {
         final Context context = new Context();
 
-        context.setVariable("username", user.getFullName());
+        context.setVariable("username", userEntity.getFullName());
         context.setVariable("otpnum", otpnum);
 
         return templateEngine.process(Template.OTP_MAIL, context);
