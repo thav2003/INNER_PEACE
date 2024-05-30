@@ -2,10 +2,10 @@ version: '3.8'
 
 services:
   be:
-    image: ${DOCKER_USERNAME}/be_inner_peace
+    image: ynnub2804/be_inner_peace
     ports:
       - "8080:8080"
-    environment:
-      - JAVA_OPTS=-Xms512m -Xmx1024m
+    env_file:
+      - .env
     restart: unless-stopped
     tty: true
