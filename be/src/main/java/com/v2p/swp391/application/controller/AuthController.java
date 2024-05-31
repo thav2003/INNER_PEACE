@@ -19,6 +19,12 @@ public class AuthController {
 
     private final AuthService authService;
 
+    @PostMapping(value = "/send-otp")
+    public CoreApiResponse<?> generateOTP(@RequestParam("email") String email)
+    {
+        authService.sendOTP(email);
+        return CoreApiResponse.success("generate successfully");
+    }
 
     @PostMapping("/signin")
     public CoreApiResponse<AuthResponse> signin(

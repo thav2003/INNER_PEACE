@@ -186,4 +186,34 @@ public class AuthService {
         userRepository.save(userEntity);
         otpGenerator.clearOTPFromCache(request.getEmail());
     }
+
+    public void sendOTP(String email){
+        UserEntity user = userRepository
+                .findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "Email", email));
+
+
+        Integer otpValue = otpGenerator.generateOTP(email);
+
+        if (otpValue == -1)
+        {
+            log.error("OTP generator is not working...");
+            return;
+        }
+
+        log.info("Generated OTP: {}", otpValue);
+
+        List<String> recipients = new ArrayList<>();
+        recipients.add(user.getEmail());
+
+        // generate emailDTO object
+        MailEvent mailEvent = new MailEvent(this);
+        mailEvent.setSubject("Spring Boot Forget Password.");
+        mailEvent.setBody(thymeleafService.getOTPContent(user,otpValue));
+//        mailEvent.setBody("OTP Password: " + otpValue);
+        mailEvent.setRecipients(recipients);
+
+        applicationEventPublisher.publishEvent(mailEvent);
+    }
+
 }
