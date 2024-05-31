@@ -40,7 +40,7 @@ public class OpenAPIConfig {
 
 
         Info info = new Info()
-                .title("Demo BE-391 BirdFarmShop API")
+                .title("Backend API")
                 .version("1.0.0")
                 .contact(contact)
                 .description("This API exposes endpoints to manage demo.");
