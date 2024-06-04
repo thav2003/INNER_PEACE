@@ -25,4 +25,10 @@ public class Nutrient {
 
     private Double percentOfDailyNeeds;
 
+    public Nutrient(String name, Double amount, String unit, Double percentOfDailyNeeds) {
+        this.name = name;
+        this.amount = amount;
+        this.unit = unit;
+        this.percentOfDailyNeeds = percentOfDailyNeeds;
+    }
 }

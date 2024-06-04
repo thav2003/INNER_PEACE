@@ -23,4 +23,9 @@ public class Flavonoid {
 
     private String unit;
 
+    public Flavonoid(String name, Double amount, String unit) {
+        this.name = name;
+        this.amount = amount;
+        this.unit = unit;
+    }
 }

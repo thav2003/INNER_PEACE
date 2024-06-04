@@ -19,4 +19,9 @@ public class InstructionDuration {
 
     private Integer number;
     private String unit;
+
+    public InstructionDuration(Integer number, String unit) {
+        this.number = number;
+        this.unit = unit;
+    }
 }

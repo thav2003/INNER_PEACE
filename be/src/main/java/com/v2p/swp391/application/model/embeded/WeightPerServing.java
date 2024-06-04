@@ -21,4 +21,8 @@ public class WeightPerServing {
 
     private String unit;
 
+    public WeightPerServing(Double amount, String unit) {
+        this.amount = amount;
+        this.unit = unit;
+    }
 }

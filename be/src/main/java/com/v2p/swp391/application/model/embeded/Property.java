@@ -23,4 +23,9 @@ public class Property {
 
     private String unit;
 
+    public Property(String name, Double amount, String unit) {
+        this.name = name;
+        this.amount = amount;
+        this.unit = unit;
+    }
 }

@@ -23,4 +23,9 @@ public class CaloricBreakdown {
 
     private Double percentCarbs;
 
+    public CaloricBreakdown(Double percentProtein, Double percentFat, Double percentCarbs) {
+        this.percentProtein = percentProtein;
+        this.percentFat = percentFat;
+        this.percentCarbs = percentCarbs;
+    }
 }
