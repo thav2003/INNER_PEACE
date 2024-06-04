@@ -13,6 +13,9 @@ import java.util.List;
 @NoArgsConstructor
 @Embeddable
 public class Nutrition {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @ElementCollection
     @JoinTable(name = "nutrition_nutrients", joinColumns = @JoinColumn(name = "nutrition_id"))

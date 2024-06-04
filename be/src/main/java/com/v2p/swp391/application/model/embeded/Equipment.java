@@ -8,6 +8,9 @@ import lombok.*;
 @NoArgsConstructor
 @Embeddable
 public class Equipment {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String name;
 
