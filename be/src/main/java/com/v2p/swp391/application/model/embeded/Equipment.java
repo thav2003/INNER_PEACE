@@ -8,9 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @Embeddable
 public class Equipment {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     private String name;
 
@@ -18,9 +15,4 @@ public class Equipment {
 
     private String image;
 
-    public Equipment(String name, String localizedName, String image) {
-        this.name = name;
-        this.localizedName = localizedName;
-        this.image = image;
-    }
 }

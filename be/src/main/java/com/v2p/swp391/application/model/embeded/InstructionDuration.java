@@ -13,15 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Embeddable
 public class InstructionDuration {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     private Integer number;
     private String unit;
 
-    public InstructionDuration(Integer number, String unit) {
-        this.number = number;
-        this.unit = unit;
-    }
 }

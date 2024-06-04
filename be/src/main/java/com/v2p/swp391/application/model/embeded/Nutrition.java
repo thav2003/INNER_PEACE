@@ -13,9 +13,6 @@ import java.util.List;
 @NoArgsConstructor
 @Embeddable
 public class Nutrition {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     @ElementCollection
     @JoinTable(name = "nutrition_nutrients", joinColumns = @JoinColumn(name = "nutrition_id"))
@@ -37,12 +34,4 @@ public class Nutrition {
 
     private WeightPerServing weightPerServing;
 
-    public Nutrition(List<Nutrient> nutrients, List<Property> properties, List<Flavonoid> flavonoids, List<IngredientEntity> ingredients, CaloricBreakdown caloricBreakdown, WeightPerServing weightPerServing) {
-        this.nutrients = nutrients;
-        this.properties = properties;
-        this.flavonoids = flavonoids;
-        this.ingredients = ingredients;
-        this.caloricBreakdown = caloricBreakdown;
-        this.weightPerServing = weightPerServing;
-    }
 }

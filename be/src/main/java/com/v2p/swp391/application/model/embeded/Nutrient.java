@@ -13,9 +13,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Embeddable
 public class Nutrient {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     private String name;
 
@@ -24,11 +21,4 @@ public class Nutrient {
     private String unit;
 
     private Double percentOfDailyNeeds;
-
-    public Nutrient(String name, Double amount, String unit, Double percentOfDailyNeeds) {
-        this.name = name;
-        this.amount = amount;
-        this.unit = unit;
-        this.percentOfDailyNeeds = percentOfDailyNeeds;
-    }
 }

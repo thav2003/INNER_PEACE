@@ -13,19 +13,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Embeddable
 public class CaloricBreakdown {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     private Double percentProtein;
 
     private Double percentFat;
 
     private Double percentCarbs;
 
-    public CaloricBreakdown(Double percentProtein, Double percentFat, Double percentCarbs) {
-        this.percentProtein = percentProtein;
-        this.percentFat = percentFat;
-        this.percentCarbs = percentCarbs;
-    }
 }

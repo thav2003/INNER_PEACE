@@ -13,16 +13,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Embeddable
 public class WeightPerServing {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     private Double amount;
 
     private String unit;
 
-    public WeightPerServing(Double amount, String unit) {
-        this.amount = amount;
-        this.unit = unit;
-    }
 }

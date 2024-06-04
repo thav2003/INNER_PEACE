@@ -13,9 +13,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Embeddable
 public class Flavonoid {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     private String name;
 
@@ -23,9 +20,4 @@ public class Flavonoid {
 
     private String unit;
 
-    public Flavonoid(String name, Double amount, String unit) {
-        this.name = name;
-        this.amount = amount;
-        this.unit = unit;
-    }
 }
