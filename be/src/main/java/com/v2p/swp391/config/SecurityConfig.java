@@ -98,10 +98,10 @@ public class SecurityConfig {
                 .httpBasic(httpBasic ->httpBasic.disable())
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(new RestAuthenticationEntryPoint()))
                 .authorizeHttpRequests((authz) -> authz
-                        .requestMatchers(apiVersionV1 + "/auth/**")
-                            .permitAll() // Cho phép truy cập không cần xác thực đến apiVersionV1/auth/**
-                        .requestMatchers(apiVersionV1 + "/**")
-                            .authenticated() // Yêu cầu xác thực cho mọi path từ apiVersionV1 ngoài trừ apiVersionV1/auth/**
+//                        .requestMatchers(apiVersionV1 + "/auth/**")
+//                            .permitAll() // Cho phép truy cập không cần xác thực đến apiVersionV1/auth/**
+//                        .requestMatchers(apiVersionV1 + "/**")
+//                            .authenticated() // Yêu cầu xác thực cho mọi path từ apiVersionV1 ngoài trừ apiVersionV1/auth/**
                         .anyRequest()
                             .permitAll() // Cho phép truy cập không cần xác thực đến các URL khác
                 )
