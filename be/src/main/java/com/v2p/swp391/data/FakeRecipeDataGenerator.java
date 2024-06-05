@@ -20,7 +20,7 @@ public class FakeRecipeDataGenerator {
         recipe.setReadyInMinutes(30);
         recipe.setServings(2);
         recipe.setSourceUrl("https://www.foodista.com/recipe/H45HTK22/how-to-make-pho-with-zucchini-noodles");
-        recipe.setImageUrl("https://img.spoonacular.com/recipes/1096250-556x370.jpg");
+        recipe.setImage("https://img.spoonacular.com/recipes/1096250-556x370.jpg");
         recipe.setImageType("jpg");
 
         Nutrition nutrition = new Nutrition();

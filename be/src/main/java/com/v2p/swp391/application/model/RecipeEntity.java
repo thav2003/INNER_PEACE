@@ -22,7 +22,7 @@ public class RecipeEntity extends BaseEntity{
     private Integer readyInMinutes;
     private Integer servings;
     private String sourceUrl;
-    private String imageUrl;
+    private String image;
     private String imageType;
     @Embedded
     private Nutrition nutrition;
