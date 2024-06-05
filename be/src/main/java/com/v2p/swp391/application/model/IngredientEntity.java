@@ -32,7 +32,7 @@ public class IngredientEntity extends BaseEntity{
     @ElementCollection
     @JoinTable(
             name = "ingredient_nutrient",
-            joinColumns = @JoinColumn(name = "ingredient_entity_id")
+            joinColumns = @JoinColumn(name = "ingredient_id")
     )
     private List<Nutrient> nutrients;
 
