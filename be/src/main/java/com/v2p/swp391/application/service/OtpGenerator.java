@@ -5,6 +5,8 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import org.springframework.stereotype.Service;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -12,7 +14,8 @@ import java.util.concurrent.TimeUnit;
 public class OtpGenerator {
 
     private static final Integer EXPIRE_MIN = 10;
-    private LoadingCache<String, Integer> otpCache;
+    private static final Integer OTP_LENGTH = 4;
+    private LoadingCache<String, String> otpCache;
 
     /**
      * Constructor configuration.
@@ -22,10 +25,10 @@ public class OtpGenerator {
         super();
         otpCache = CacheBuilder.newBuilder()
                 .expireAfterWrite(EXPIRE_MIN, TimeUnit.MINUTES)
-                .build(new CacheLoader<String, Integer>() {
+                .build(new CacheLoader<String, String>() { // Sửa Integer thành String
                     @Override
-                    public Integer load(String s) throws Exception {
-                        return 0;
+                    public String load(String s) throws Exception {
+                        return ""; // Thay 0 bằng chuỗi rỗng
                     }
                 });
     }
@@ -36,10 +39,22 @@ public class OtpGenerator {
      * @param key - cache key
      * @return cache value (generated OTP number)
      */
-    public Integer generateOTP(String key)
+    public String generateOTP(String key)
     {
-        Random random = new Random();
-        int OTP = 100000 + random.nextInt(900000);
+        StringBuilder generatedOTP = new StringBuilder();
+        SecureRandom secureRandom = new SecureRandom();
+        try {
+
+            secureRandom = SecureRandom.getInstance(secureRandom.getAlgorithm());
+
+            for (int i = 1; i <= OTP_LENGTH; i++) {
+                generatedOTP.append(secureRandom.nextInt(10));
+            }
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        String OTP = generatedOTP.toString();
         otpCache.put(key, OTP);
 
         return OTP;
@@ -51,7 +66,7 @@ public class OtpGenerator {
      * @param key - target key
      * @return OTP value
      */
-    public Integer getOPTByKey(String key)
+    public String getOPTByKey(String key)
     {
         return otpCache.getIfPresent(key);
     }

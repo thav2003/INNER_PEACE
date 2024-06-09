@@ -31,29 +31,6 @@ public class RecipeController {
         return recipeService.getAllRecipes();
     }
 
-    @GetMapping("/search")
-    public List<RecipeEntity> searchRecipes(@RequestParam(required = false) String cuisines,
-                                            @RequestParam(required = false) String dishTypes,
-                                            @RequestParam(required = false) String diets,
-                                            @RequestParam(required = false) String occasions) {
-        // Handle empty search parameters
-        if (cuisines == null && dishTypes == null && diets == null && occasions == null) {
-            return recipeService.getAllRecipes();
-        }
-
-        // Build search criteria based on provided parameters
-        List<String> searchCuisines = cuisines != null ? List.of(cuisines.split(",")) : null;
-        List<String> searchDishTypes = dishTypes != null ? List.of(dishTypes.split(",")) : null;
-        List<String> searchDiets = diets != null ? List.of(diets.split(",")) : null;
-        List<String> searchOccasions = occasions != null ? List.of(occasions.split(",")) : null;
-
-        return recipeService.findRecipesByCuisines(searchCuisines)
-                .stream()
-                .filter(recipe -> searchDishTypes == null || searchDishTypes.containsAll(recipe.getDishTypes()))
-                .filter(recipe -> searchDiets == null || searchDiets.containsAll(recipe.getDiets()))
-                .filter(recipe -> searchOccasions == null || searchOccasions.containsAll(recipe.getOccasions()))
-                .toList();
-    }
 
     @PutMapping("/{id}")
     public RecipeEntity updateRecipe(@PathVariable Long id, @RequestBody RecipeEntity recipeEntity) {

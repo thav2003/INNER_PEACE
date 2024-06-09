@@ -26,21 +26,6 @@ public class RecipeService {
         return recipeRepository.findAll();
     }
 
-    public List<RecipeEntity> findRecipesByCuisines(List<String> cuisines) {
-        return recipeRepository.findByCuisinesIn(cuisines);
-    }
-
-    public List<RecipeEntity> findRecipesByDishTypes(List<String> dishTypes) {
-        return recipeRepository.findByDishTypesIn(dishTypes);
-    }
-
-    public List<RecipeEntity> findRecipesByDiets(List<String> diets) {
-        return recipeRepository.findByDietsIn(diets);
-    }
-
-    public List<RecipeEntity> findRecipesByOccasions(List<String> occasions) {
-        return recipeRepository.findByOccasionsIn(occasions);
-    }
 
     public RecipeEntity updateRecipe(RecipeEntity recipeEntity) {
         return recipeRepository.save(recipeEntity);
@@ -49,4 +34,5 @@ public class RecipeService {
     public void deleteRecipeById(Long id) {
         recipeRepository.deleteById(id);
     }
+
 }

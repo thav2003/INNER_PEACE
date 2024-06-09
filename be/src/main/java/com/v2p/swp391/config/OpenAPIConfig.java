@@ -36,7 +36,6 @@ public class OpenAPIConfig {
         Contact contact = new Contact();
         contact.setEmail("vuthase172485@fpt.edu.vn");
         contact.setName("Truong Hoang Anh Vu");
-        contact.setUrl("https://birdfarmshop.techx.id.vn");
 
 
         Info info = new Info()

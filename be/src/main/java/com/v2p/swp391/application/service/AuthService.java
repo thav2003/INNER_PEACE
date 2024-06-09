@@ -2,8 +2,9 @@ package com.v2p.swp391.application.service;
 
 import com.v2p.swp391.application.event.MailEvent;
 import com.v2p.swp391.application.request.ChangePasswordRequest;
-import com.v2p.swp391.common.constant.Image;
+import com.v2p.swp391.common.constant.Path;
 import com.v2p.swp391.common.enums.Role;
+import com.v2p.swp391.common.enums.SocialProvider;
 import com.v2p.swp391.exception.AppException;
 import com.v2p.swp391.application.model.UserEntity;
 import com.v2p.swp391.application.repository.UserRepository;
@@ -91,17 +92,21 @@ public class AuthService {
         Optional<UserEntity> userOptional = userRepository.findByEmail(request.getEmail());
         if(userOptional.isPresent()) {
             throw new AppException(HttpStatus.BAD_REQUEST,"Email address already in use.");
+        }else{
+
         }
+
 
         // Creating user's account
         UserEntity userEntity = new UserEntity();
         userEntity.setFullName(request.getFullName());
         userEntity.setEmail(request.getEmail());
         userEntity.setPassword(passwordEncoder.encode(request.getPassword()));
-        userEntity.setImageUrl(Image.DEFAULT_AVATAR);
+        userEntity.setImageUrl(Path.DEFAULT_AVATAR);
         userEntity.setRole(Role.CUSTOMER);
         userEntity.setPhoneNumber(request.getPhone());
         userEntity.setIsActive(true);
+        userEntity.setSocialProvider(SocialProvider.DATABASE);
         userRepository.save(userEntity);
     }
 
@@ -116,12 +121,7 @@ public class AuthService {
 
 
         // generate otp
-        Integer otpValue = otpGenerator.generateOTP(userPrincipal.getEmail());
-        if (otpValue == -1)
-        {
-            log.error("OTP generator is not working...");
-            return;
-        }
+        String otpValue = otpGenerator.generateOTP(userPrincipal.getEmail());
 
         log.info("Generated OTP: {}", otpValue);
 
@@ -142,16 +142,10 @@ public class AuthService {
         applicationEventPublisher.publishEvent(mailEvent);
     }
 
-    public void validateOTP(Integer otpNumber)
+    public void validateOTP(String key,String otpNumber)
     {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 
-        if(!userPrincipal.getUserEntity().getIsActive()){
-            throw new AppException(HttpStatus.UNAUTHORIZED,"User not login");
-        }
-
-        Integer cacheOTP = otpGenerator.getOPTByKey(userPrincipal.getEmail());
+        String cacheOTP = otpGenerator.getOPTByKey(key);
 
         log.info("OTP: {}", cacheOTP);
 
@@ -169,7 +163,7 @@ public class AuthService {
     {
 
 
-        Integer cacheOTP = otpGenerator.getOPTByKey(request.getEmail());
+        String cacheOTP = otpGenerator.getOPTByKey(request.getEmail());
 
         log.info("OTP: {}", cacheOTP);
 
@@ -193,13 +187,7 @@ public class AuthService {
                 .orElseThrow(() -> new ResourceNotFoundException("User", "Email", email));
 
 
-        Integer otpValue = otpGenerator.generateOTP(email);
-
-        if (otpValue == -1)
-        {
-            log.error("OTP generator is not working...");
-            return;
-        }
+        String otpValue = otpGenerator.generateOTP(email);
 
         log.info("Generated OTP: {}", otpValue);
 

@@ -30,7 +30,6 @@ public class UserEntity extends BaseEntity{
     @Column(nullable = false)
     private String email;
 
-    @JsonIgnore
     private String password;
 
     private String imageUrl;

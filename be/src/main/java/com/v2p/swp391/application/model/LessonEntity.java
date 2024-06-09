@@ -14,4 +14,12 @@ public class LessonEntity extends  BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private String name;
+    private Integer duration;
+    @Column(columnDefinition = "TEXT")
+    private String description;
+    private Boolean isVip;
+    private String imgUrl;
+    private String videoUrl;
 }

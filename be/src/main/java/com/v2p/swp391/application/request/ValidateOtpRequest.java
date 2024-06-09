@@ -10,5 +10,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ValidateOtpRequest {
-    private Integer otp;
+    private String email;
+    private String otp;
 }

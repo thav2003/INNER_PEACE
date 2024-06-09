@@ -24,6 +24,6 @@ public class ChangePasswordRequest {
     @NotEmpty(message = "Confirm Password is required")
     private String confirmPassword;
 
-    @Positive(message = "Otp is required")
-    private Integer otp;
+    @NotEmpty(message = "Otp is required")
+    private String otp;
 }

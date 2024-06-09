@@ -4,8 +4,7 @@ import com.v2p.swp391.application.request.*;
 import com.v2p.swp391.application.service.AuthService;
 import com.v2p.swp391.common.api.CoreApiResponse;
 import com.v2p.swp391.application.response.AuthResponse;
-import com.v2p.swp391.config.AppProperties;
-import com.v2p.swp391.security.UserPrincipal;
+
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,10 +41,18 @@ public class AuthController {
     }
 
     @PostMapping("/reset-password")
-//    @PreAuthorize("hasRole('CUSTOMER')")
     public CoreApiResponse<?> changePassword(@Valid @RequestBody ChangePasswordRequest request)
     {
         authService.changePassword(request);
         return CoreApiResponse.success("Password has been changed");
     }
+
+    @PostMapping(value = "/checkotp")
+    public CoreApiResponse<?> validateOTP(@RequestBody ValidateOtpRequest request)
+    {
+        authService.validateOTP(request.getEmail(),request.getOtp());
+        return CoreApiResponse.success("Entered OTP is valid!");
+
+    }
+
 }

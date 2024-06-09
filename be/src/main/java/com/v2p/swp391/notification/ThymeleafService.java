@@ -46,7 +46,7 @@ public class ThymeleafService {
         return templateResolver;
     }
 
-    public String getOTPContent(UserEntity userEntity, Integer otpnum) {
+    public String getOTPContent(UserEntity userEntity, String otpnum) {
         final Context context = new Context();
 
         context.setVariable("username", userEntity.getFullName());

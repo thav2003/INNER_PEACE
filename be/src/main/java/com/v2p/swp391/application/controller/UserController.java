@@ -1,21 +1,21 @@
 package com.v2p.swp391.application.controller;
 
-import com.v2p.swp391.application.mapper.UserHttpMapper;
 import com.v2p.swp391.application.model.UserEntity;
-import com.v2p.swp391.application.request.ChangePasswordRequest;
-import com.v2p.swp391.application.response.AuthResponse;
+import com.v2p.swp391.application.request.CreateUserRequest;
+import com.v2p.swp391.application.request.UpdateUserRequest;
+import com.v2p.swp391.application.response.UserResponse;
 import com.v2p.swp391.application.service.AuthService;
 import com.v2p.swp391.application.service.UserService;
-import com.v2p.swp391.common.api.CoreApiResponse;
-import jakarta.validation.Valid;
+import com.v2p.swp391.common.enums.SocialProvider;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @AllArgsConstructor
@@ -25,35 +25,43 @@ public class UserController {
     private final AuthService authService;
 
     private final UserService userService;
-    private final UserHttpMapper userMapper;
+
     @GetMapping
-    public ResponseEntity<List<UserEntity>> getAllUsers() {
+    public ResponseEntity<List<UserResponse>> getAllUsers() {
         List<UserEntity> users = userService.getAllUsers();
-        return ResponseEntity.ok(users);
+        ModelMapper modelMapper = new ModelMapper();
+        List<UserResponse> userResponses = users.stream()
+                .map(user -> modelMapper.map(user, UserResponse.class))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(userResponses);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserEntity> getUserById(@PathVariable Long id) {
+    public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
+        ModelMapper modelMapper = new ModelMapper();
         return userService.getUserById(id)
+                .map(user -> modelMapper.map(user, UserResponse.class))
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<UserEntity> createUser(@RequestBody UserEntity user) {
-        UserEntity createdUser = userService.createUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+    public ResponseEntity<UserResponse> createUser(@RequestBody CreateUserRequest request) {
+        ModelMapper modelMapper = new ModelMapper();
+        UserEntity createdUser = userService.createUser(modelMapper.map(request,UserEntity.class));
+        UserResponse userResponse = modelMapper.map(createdUser, UserResponse.class);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userResponse);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserEntity> updateUser(@PathVariable Long id, @RequestBody UserEntity userDto) {
-        UserEntity user = userService.getUserById(id).orElse(null);
-        if (user == null) {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, @RequestBody UpdateUserRequest request) {
+        ModelMapper modelMapper = new ModelMapper();
+        UserEntity updatedUser = userService.updateUser(id, modelMapper.map(request,UserEntity.class));
+        if (updatedUser != null) {
+            UserResponse userResponse = modelMapper.map(updatedUser, UserResponse.class);
+            return ResponseEntity.ok(userResponse);
         }
-        userMapper.updateUserFromDto(userDto, user);
-        UserEntity updatedUser = userService.updateUser(user);
-        return ResponseEntity.ok(updatedUser);
+        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
