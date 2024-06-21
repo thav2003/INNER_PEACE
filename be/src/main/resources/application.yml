@@ -1,6 +1,11 @@
 server:
-  port: ${SERVER_PORT:8080}
-
+  http:
+    port: 8080
+  port: 8443
+  ssl:
+    key-store: classpath:certificate.p12
+    key-store-password: anhvu123
+    keyStoreType: PKCS12
 spring:
 
   datasource:

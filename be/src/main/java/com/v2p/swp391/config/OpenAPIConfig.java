@@ -33,22 +33,18 @@ public class OpenAPIConfig {
         prodServer.setUrl(prodUrl);
         prodServer.setDescription("Server URL in Production environment");
 
-        Contact contact = new Contact();
-        contact.setEmail("vuthase172485@fpt.edu.vn");
-        contact.setName("Truong Hoang Anh Vu");
 
 
         Info info = new Info()
                 .title("Backend API")
                 .version("1.0.0")
-                .contact(contact)
                 .description("This API exposes endpoints to manage demo.");
 
         return new OpenAPI().info(info).servers(List.of(devServer, prodServer))
                 .addSecurityItem(new SecurityRequirement().
                         addList("Bearer Authentication"))
                 .components(new Components().addSecuritySchemes
-                        ("Bearer Authentication", createAPIKeyScheme()));
+                        ("BearerAuthentication", createAPIKeyScheme()));
     }
 
     private SecurityScheme createAPIKeyScheme() {

@@ -89,6 +89,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+
                 .cors(withDefaults())
                 .sessionManagement((session) -> session
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
