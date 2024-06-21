@@ -13,13 +13,13 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { AppStackParamList } from "~/navigator/AppNavigator";
 
-type Props = NativeStackScreenProps<AppStackParamList, "Welcome">;
+type Props = NativeStackScreenProps<AppStackParamList, "WELCOME">;
 const WelcomeScreen: React.FC<Props> = ({ navigation }) => {
   const handleSignIn = () => {
-    navigation.navigate("Login");
+    navigation.navigate("LOGIN");
   };
   const handleSignUp = () => {
-    navigation.navigate("Register");
+    navigation.navigate("REGISTER");
   };
   return (
     <SafeAreaView style={styles.container}>

@@ -77,7 +77,7 @@ app:
     accessTokenExpirationMsec: 864000000
     #accessTokenExpirationMsec: 900000 # 15 phút
   cors:
-    allowedOrigins: http://localhost:3000,http://localhost:3001,http://159.223.36.234:8080
+    allowedOrigins: http://localhost:3000,http://localhost:3001,http://159.223.36.234:8080, http://192.168.1.9:8080
   oauth2:
     # After successfully authenticating with the OAuth2 Provider,
     # we'll be generating an auth token for the user and sending the token to the

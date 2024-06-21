@@ -1,20 +1,21 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SplashScreen from "~/screens/SplashScreen";
-import AppNavigator from "./AppNavigator";
+import AppNavigator, { AppStackParamList } from "./AppNavigator";
+import { NavigatorScreenParams } from "@react-navigation/native";
 
 export type InitialStackParamList = {
-  Splash: undefined;
-  App: undefined;
+  SPLASH: undefined;
+  APP: NavigatorScreenParams<AppStackParamList>;
 };
 const Stack = createNativeStackNavigator<InitialStackParamList>();
 const InitialNavigator: React.FC = () => {
   return (
     <Stack.Navigator
       screenOptions={{ headerShown: false }}
-      initialRouteName="Splash"
+      initialRouteName="SPLASH"
     >
-      <Stack.Screen name="Splash" component={SplashScreen} />
-      <Stack.Screen name="App" component={AppNavigator} />
+      <Stack.Screen name="SPLASH" component={SplashScreen} />
+      <Stack.Screen name="APP" component={AppNavigator} />
     </Stack.Navigator>
   );
 };

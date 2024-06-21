@@ -20,7 +20,7 @@ import { AppStackParamList } from "~/navigator/AppNavigator";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
-type Props = NativeStackScreenProps<AppStackParamList, "Register">;
+type Props = NativeStackScreenProps<AppStackParamList, "REGISTER">;
 
 const RegisterScreen: React.FC<Props> = ({ route, navigation }: Props) => {
   const [fullName, setFullName] = useState("");
@@ -38,7 +38,7 @@ const RegisterScreen: React.FC<Props> = ({ route, navigation }: Props) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSignIn = () => {
-    navigation.navigate("Login");
+    navigation.navigate("LOGIN");
   };
 
   const validateFullName = (name: string) => {

@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-export const BASE_PATH = "http://159.223.36.234:8080".replace(/\/+$/, "");
+export const BASE_PATH = "http://192.168.1.9:8080".replace(/\/+$/, "");
 
 export interface ConfigurationParameters {
   basePath?: string; // override base path
@@ -229,6 +229,7 @@ export class BaseAPI {
 
   private fetchApi = async (url: string, init: RequestInit) => {
     let fetchParams = { url, init };
+
     for (const middleware of this.middleware) {
       if (middleware.pre) {
         fetchParams =
@@ -238,6 +239,7 @@ export class BaseAPI {
           })) || fetchParams;
       }
     }
+
     let response: Response | undefined = undefined;
     try {
       response = await (this.configuration.fetchApi || fetch)(

@@ -24,10 +24,12 @@ import { AppStackParamList } from "~/navigator/AppNavigator";
 import BackwardBtn from "~/components/BackwardBtn";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useAuthStore } from "~/stores/auth.store";
+import { ResponseError } from "~/api/v1";
 
-type Props = NativeStackScreenProps<AppStackParamList, "Login">;
+type Props = NativeStackScreenProps<AppStackParamList, "LOGIN">;
 
 const LoginScreen: React.FC<Props> = ({ route, navigation }: Props) => {
+  const [loading, setLoading] = useState(false);
   const loginUser = useAuthStore((state) => state.loginUser);
   const [email, setEmail] = useState("truonghoanganhvu04@gmail.com");
   const [password, setPassword] = useState("123456");
@@ -38,7 +40,7 @@ const LoginScreen: React.FC<Props> = ({ route, navigation }: Props) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSignUp = () => {
-    navigation.navigate("Register");
+    navigation.navigate("REGISTER");
   };
 
   const handleForgotPw = () => {
@@ -81,37 +83,23 @@ const LoginScreen: React.FC<Props> = ({ route, navigation }: Props) => {
     }
 
     try {
-      console.log("Test 1");
+      setLoading(true);
       await loginUser({
         email: email,
         password: password,
       });
-      console.log("Test 2");
-      const response = await fetch(
-        "http://159.223.36.234:8080/api/v1/auth/signin",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: email,
-            password: password,
-          }),
-        }
-      );
-      console.log(await response.json());
-      //   const data = await response.json();
-      //   if (response.ok) {
-      //     const userId = data.data.userId;
-      //     const accessToken = data.data.accessToken;
-      //     AsyncStorage.setItem("accessToken", accessToken);
-      //     navigation.navigate("HomeTab");
-      //   } else {
-      //     Alert.alert("Đăng nhập thất bại", "Email và mật khẩu không đúng!");
-      //   }
+
+      navigation.navigate("HOME");
     } catch (error) {
-      Alert.alert("Lỗi mạng", "Vui lòng kiểm tra lại kết nối!");
+      const err = error as ResponseError;
+      const errResponse = await err.response.json();
+      if (errResponse.message) {
+        Alert.alert("Đăng nhập", errResponse.message);
+      } else {
+        Alert.alert("Lỗi mạng", "Vui lòng kiểm tra lại kết nối!");
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -209,6 +197,7 @@ const LoginScreen: React.FC<Props> = ({ route, navigation }: Props) => {
             labelStyle={{ fontSize: 18 }}
             style={styles.signInBtn}
             onPress={handleSignIn}
+            loading={loading}
           >
             Đăng nhập
           </Button>

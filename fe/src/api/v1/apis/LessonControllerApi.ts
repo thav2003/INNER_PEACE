@@ -12,355 +12,429 @@
  * Do not edit the class manually.
  */
 
-
-import * as runtime from '../runtime';
-import type {
-  LessonEntity,
-} from '../models/index';
-import {
-    LessonEntityFromJSON,
-    LessonEntityToJSON,
-} from '../models/index';
+import * as runtime from "../runtime";
+import type { LessonEntity } from "../models/index";
+import { LessonEntityFromJSON, LessonEntityToJSON } from "../models/index";
 
 export interface CreateLessonRequest {
-    name?: string;
-    duration?: number;
-    description?: string;
-    isVip?: boolean;
-    imgFile?: Blob;
-    videoFile?: Blob;
+  name?: string;
+  duration?: number;
+  description?: string;
+  isVip?: boolean;
+  imgFile?: Blob;
+  videoFile?: Blob;
 }
 
 export interface DeleteLessonRequest {
-    id: number;
+  id: number;
 }
 
 export interface GetLessonByIdRequest {
-    id: number;
+  id: number;
 }
 
 export interface SearchLessonsRequest {
-    keyword?: string;
-    page?: number;
-    size?: number;
+  keyword?: string;
+  page?: number;
+  size?: number;
 }
 
 export interface UpdateLessonRequest {
-    id: number;
-    name?: string;
-    duration?: number;
-    description?: string;
-    isVip?: boolean;
-    imgFile?: Blob;
+  id: number;
+  name?: string;
+  duration?: number;
+  description?: string;
+  isVip?: boolean;
+  imgFile?: Blob;
 }
 
 /**
- * 
+ *
  */
 export class LessonControllerApi extends runtime.BaseAPI {
+  /**
+   */
+  async createLessonRaw(
+    requestParameters: CreateLessonRequest,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction
+  ): Promise<runtime.ApiResponse<LessonEntity>> {
+    const queryParameters: any = {};
 
-    /**
-     */
-    async createLessonRaw(requestParameters: CreateLessonRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LessonEntity>> {
-        const queryParameters: any = {};
+    const headerParameters: runtime.HTTPHeaders = {};
 
-        const headerParameters: runtime.HTTPHeaders = {};
+    if (this.configuration && this.configuration.accessToken) {
+      const token = this.configuration.accessToken;
+      const tokenString = await token("BearerAuthentication", []);
 
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("BearerAuthentication", []);
+      if (tokenString) {
+        headerParameters["Authorization"] = `Bearer ${tokenString}`;
+      }
+    }
+    const consumes: runtime.Consume[] = [
+      { contentType: "multipart/form-data" },
+    ];
+    // @ts-ignore: canConsumeForm may be unused
+    const canConsumeForm = runtime.canConsumeForm(consumes);
 
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-        const consumes: runtime.Consume[] = [
-            { contentType: 'multipart/form-data' },
-        ];
-        // @ts-ignore: canConsumeForm may be unused
-        const canConsumeForm = runtime.canConsumeForm(consumes);
-
-        let formParams: { append(param: string, value: any): any };
-        let useForm = false;
-        // use FormData to transmit files using content-type "multipart/form-data"
-        useForm = canConsumeForm;
-        // use FormData to transmit files using content-type "multipart/form-data"
-        useForm = canConsumeForm;
-        if (useForm) {
-            formParams = new FormData();
-        } else {
-            formParams = new URLSearchParams();
-        }
-
-        if (requestParameters['name'] != null) {
-            formParams.append('name', requestParameters['name'] as any);
-        }
-
-        if (requestParameters['duration'] != null) {
-            formParams.append('duration', requestParameters['duration'] as any);
-        }
-
-        if (requestParameters['description'] != null) {
-            formParams.append('description', requestParameters['description'] as any);
-        }
-
-        if (requestParameters['isVip'] != null) {
-            formParams.append('isVip', requestParameters['isVip'] as any);
-        }
-
-        if (requestParameters['imgFile'] != null) {
-            formParams.append('imgFile', requestParameters['imgFile'] as any);
-        }
-
-        if (requestParameters['videoFile'] != null) {
-            formParams.append('videoFile', requestParameters['videoFile'] as any);
-        }
-
-        const response = await this.request({
-            path: `/api/v1/lessons`,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: formParams,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => LessonEntityFromJSON(jsonValue));
+    let formParams: { append(param: string, value: any): any };
+    let useForm = false;
+    // use FormData to transmit files using content-type "multipart/form-data"
+    useForm = canConsumeForm;
+    // use FormData to transmit files using content-type "multipart/form-data"
+    useForm = canConsumeForm;
+    if (useForm) {
+      formParams = new FormData();
+    } else {
+      formParams = new URLSearchParams();
     }
 
-    /**
-     */
-    async createLesson(requestParameters: CreateLessonRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LessonEntity> {
-        const response = await this.createLessonRaw(requestParameters, initOverrides);
-        return await response.value();
+    if (requestParameters["name"] != null) {
+      formParams.append("name", requestParameters["name"] as any);
     }
 
-    /**
-     */
-    async deleteLessonRaw(requestParameters: DeleteLessonRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling deleteLesson().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("BearerAuthentication", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-        const response = await this.request({
-            path: `/api/v1/lessons/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'DELETE',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
+    if (requestParameters["duration"] != null) {
+      formParams.append("duration", requestParameters["duration"] as any);
     }
 
-    /**
-     */
-    async deleteLesson(requestParameters: DeleteLessonRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.deleteLessonRaw(requestParameters, initOverrides);
+    if (requestParameters["description"] != null) {
+      formParams.append("description", requestParameters["description"] as any);
     }
 
-    /**
-     */
-    async getAllLessonsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<LessonEntity>>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("BearerAuthentication", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-        const response = await this.request({
-            path: `/api/v1/lessons`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(LessonEntityFromJSON));
+    if (requestParameters["isVip"] != null) {
+      formParams.append("isVip", requestParameters["isVip"] as any);
     }
 
-    /**
-     */
-    async getAllLessons(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<LessonEntity>> {
-        const response = await this.getAllLessonsRaw(initOverrides);
-        return await response.value();
+    if (requestParameters["imgFile"] != null) {
+      formParams.append("imgFile", requestParameters["imgFile"] as any);
     }
 
-    /**
-     */
-    async getLessonByIdRaw(requestParameters: GetLessonByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LessonEntity>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling getLessonById().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("BearerAuthentication", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-        const response = await this.request({
-            path: `/api/v1/lessons/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => LessonEntityFromJSON(jsonValue));
+    if (requestParameters["videoFile"] != null) {
+      formParams.append("videoFile", requestParameters["videoFile"] as any);
     }
 
-    /**
-     */
-    async getLessonById(requestParameters: GetLessonByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LessonEntity> {
-        const response = await this.getLessonByIdRaw(requestParameters, initOverrides);
-        return await response.value();
+    const response = await this.request(
+      {
+        path: `/api/v1/lessons`,
+        method: "POST",
+        headers: headerParameters,
+        query: queryParameters,
+        body: formParams,
+      },
+      initOverrides
+    );
+
+    return new runtime.JSONApiResponse(response, (jsonValue) =>
+      LessonEntityFromJSON(jsonValue)
+    );
+  }
+
+  /**
+   */
+  async createLesson(
+    requestParameters: CreateLessonRequest = {},
+    initOverrides?: RequestInit | runtime.InitOverrideFunction
+  ): Promise<LessonEntity> {
+    const response = await this.createLessonRaw(
+      requestParameters,
+      initOverrides
+    );
+    return await response.value();
+  }
+
+  /**
+   */
+  async deleteLessonRaw(
+    requestParameters: DeleteLessonRequest,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction
+  ): Promise<runtime.ApiResponse<void>> {
+    if (requestParameters["id"] == null) {
+      throw new runtime.RequiredError(
+        "id",
+        'Required parameter "id" was null or undefined when calling deleteLesson().'
+      );
     }
 
-    /**
-     */
-    async searchLessonsRaw(requestParameters: SearchLessonsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<LessonEntity>>> {
-        const queryParameters: any = {};
+    const queryParameters: any = {};
 
-        if (requestParameters['keyword'] != null) {
-            queryParameters['keyword'] = requestParameters['keyword'];
-        }
+    const headerParameters: runtime.HTTPHeaders = {};
 
-        if (requestParameters['page'] != null) {
-            queryParameters['page'] = requestParameters['page'];
-        }
+    if (this.configuration && this.configuration.accessToken) {
+      const token = this.configuration.accessToken;
+      const tokenString = await token("BearerAuthentication", []);
 
-        if (requestParameters['size'] != null) {
-            queryParameters['size'] = requestParameters['size'];
-        }
+      if (tokenString) {
+        headerParameters["Authorization"] = `Bearer ${tokenString}`;
+      }
+    }
+    const response = await this.request(
+      {
+        path: `/api/v1/lessons/{id}`.replace(
+          `{${"id"}}`,
+          encodeURIComponent(String(requestParameters["id"]))
+        ),
+        method: "DELETE",
+        headers: headerParameters,
+        query: queryParameters,
+      },
+      initOverrides
+    );
 
-        const headerParameters: runtime.HTTPHeaders = {};
+    return new runtime.VoidApiResponse(response);
+  }
 
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("BearerAuthentication", []);
+  /**
+   */
+  async deleteLesson(
+    requestParameters: DeleteLessonRequest,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction
+  ): Promise<void> {
+    await this.deleteLessonRaw(requestParameters, initOverrides);
+  }
 
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-        const response = await this.request({
-            path: `/api/v1/lessons/search`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
+  /**
+   */
+  async getAllLessonsRaw(
+    initOverrides?: RequestInit | runtime.InitOverrideFunction
+  ): Promise<runtime.ApiResponse<Array<LessonEntity>>> {
+    const queryParameters: any = {};
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(LessonEntityFromJSON));
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    if (this.configuration && this.configuration.accessToken) {
+      const token = this.configuration.accessToken;
+      const tokenString = await token("BearerAuthentication", []);
+
+      if (tokenString) {
+        headerParameters["Authorization"] = `Bearer ${tokenString}`;
+      }
+    }
+    const response = await this.request(
+      {
+        path: `/api/v1/lessons`,
+        method: "GET",
+        headers: headerParameters,
+        query: queryParameters,
+      },
+      initOverrides
+    );
+
+    return new runtime.JSONApiResponse(response, (jsonValue) =>
+      jsonValue.map(LessonEntityFromJSON)
+    );
+  }
+
+  /**
+   */
+  async getAllLessons(
+    initOverrides?: RequestInit | runtime.InitOverrideFunction
+  ): Promise<Array<LessonEntity>> {
+    const response = await this.getAllLessonsRaw(initOverrides);
+    return await response.value();
+  }
+
+  /**
+   */
+  async getLessonByIdRaw(
+    requestParameters: GetLessonByIdRequest,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction
+  ): Promise<runtime.ApiResponse<LessonEntity>> {
+    if (requestParameters["id"] == null) {
+      throw new runtime.RequiredError(
+        "id",
+        'Required parameter "id" was null or undefined when calling getLessonById().'
+      );
     }
 
-    /**
-     */
-    async searchLessons(requestParameters: SearchLessonsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<LessonEntity>> {
-        const response = await this.searchLessonsRaw(requestParameters, initOverrides);
-        return await response.value();
+    const queryParameters: any = {};
+
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    if (this.configuration && this.configuration.accessToken) {
+      const token = this.configuration.accessToken;
+      const tokenString = await token("BearerAuthentication", []);
+
+      if (tokenString) {
+        headerParameters["Authorization"] = `Bearer ${tokenString}`;
+      }
+    }
+    const response = await this.request(
+      {
+        path: `/api/v1/lessons/{id}`.replace(
+          `{${"id"}}`,
+          encodeURIComponent(String(requestParameters["id"]))
+        ),
+        method: "GET",
+        headers: headerParameters,
+        query: queryParameters,
+      },
+      initOverrides
+    );
+
+    return new runtime.JSONApiResponse(response, (jsonValue) =>
+      LessonEntityFromJSON(jsonValue)
+    );
+  }
+
+  /**
+   */
+  async getLessonById(
+    requestParameters: GetLessonByIdRequest,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction
+  ): Promise<LessonEntity> {
+    const response = await this.getLessonByIdRaw(
+      requestParameters,
+      initOverrides
+    );
+    return await response.value();
+  }
+
+  /**
+   */
+  async searchLessonsRaw(
+    requestParameters: SearchLessonsRequest,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction
+  ): Promise<runtime.ApiResponse<Array<LessonEntity>>> {
+    const queryParameters: any = {};
+
+    if (requestParameters["keyword"] != null) {
+      queryParameters["keyword"] = requestParameters["keyword"];
     }
 
-    /**
-     */
-    async updateLessonRaw(requestParameters: UpdateLessonRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LessonEntity>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling updateLesson().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("BearerAuthentication", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-        const consumes: runtime.Consume[] = [
-            { contentType: 'multipart/form-data' },
-        ];
-        // @ts-ignore: canConsumeForm may be unused
-        const canConsumeForm = runtime.canConsumeForm(consumes);
-
-        let formParams: { append(param: string, value: any): any };
-        let useForm = false;
-        // use FormData to transmit files using content-type "multipart/form-data"
-        useForm = canConsumeForm;
-        if (useForm) {
-            formParams = new FormData();
-        } else {
-            formParams = new URLSearchParams();
-        }
-
-        if (requestParameters['name'] != null) {
-            formParams.append('name', requestParameters['name'] as any);
-        }
-
-        if (requestParameters['duration'] != null) {
-            formParams.append('duration', requestParameters['duration'] as any);
-        }
-
-        if (requestParameters['description'] != null) {
-            formParams.append('description', requestParameters['description'] as any);
-        }
-
-        if (requestParameters['isVip'] != null) {
-            formParams.append('isVip', requestParameters['isVip'] as any);
-        }
-
-        if (requestParameters['imgFile'] != null) {
-            formParams.append('imgFile', requestParameters['imgFile'] as any);
-        }
-
-        const response = await this.request({
-            path: `/api/v1/lessons/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'PUT',
-            headers: headerParameters,
-            query: queryParameters,
-            body: formParams,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => LessonEntityFromJSON(jsonValue));
+    if (requestParameters["page"] != null) {
+      queryParameters["page"] = requestParameters["page"];
     }
 
-    /**
-     */
-    async updateLesson(requestParameters: UpdateLessonRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LessonEntity> {
-        const response = await this.updateLessonRaw(requestParameters, initOverrides);
-        return await response.value();
+    if (requestParameters["size"] != null) {
+      queryParameters["size"] = requestParameters["size"];
     }
 
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    if (this.configuration && this.configuration.accessToken) {
+      const token = this.configuration.accessToken;
+      const tokenString = await token("BearerAuthentication", []);
+
+      if (tokenString) {
+        headerParameters["Authorization"] = `Bearer ${tokenString}`;
+      }
+    }
+    const response = await this.request(
+      {
+        path: `/api/v1/lessons/search`,
+        method: "GET",
+        headers: headerParameters,
+        query: queryParameters,
+      },
+      initOverrides
+    );
+    return new runtime.JSONApiResponse(response, (jsonValue) =>
+      jsonValue.map(LessonEntityFromJSON)
+    );
+  }
+
+  /**
+   */
+  async searchLessons(
+    requestParameters: SearchLessonsRequest = {},
+    initOverrides?: RequestInit | runtime.InitOverrideFunction
+  ): Promise<Array<LessonEntity>> {
+    const response = await this.searchLessonsRaw(
+      requestParameters,
+      initOverrides
+    );
+    return await response.value();
+  }
+
+  /**
+   */
+  async updateLessonRaw(
+    requestParameters: UpdateLessonRequest,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction
+  ): Promise<runtime.ApiResponse<LessonEntity>> {
+    if (requestParameters["id"] == null) {
+      throw new runtime.RequiredError(
+        "id",
+        'Required parameter "id" was null or undefined when calling updateLesson().'
+      );
+    }
+
+    const queryParameters: any = {};
+
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    if (this.configuration && this.configuration.accessToken) {
+      const token = this.configuration.accessToken;
+      const tokenString = await token("BearerAuthentication", []);
+
+      if (tokenString) {
+        headerParameters["Authorization"] = `Bearer ${tokenString}`;
+      }
+    }
+    const consumes: runtime.Consume[] = [
+      { contentType: "multipart/form-data" },
+    ];
+    // @ts-ignore: canConsumeForm may be unused
+    const canConsumeForm = runtime.canConsumeForm(consumes);
+
+    let formParams: { append(param: string, value: any): any };
+    let useForm = false;
+    // use FormData to transmit files using content-type "multipart/form-data"
+    useForm = canConsumeForm;
+    if (useForm) {
+      formParams = new FormData();
+    } else {
+      formParams = new URLSearchParams();
+    }
+
+    if (requestParameters["name"] != null) {
+      formParams.append("name", requestParameters["name"] as any);
+    }
+
+    if (requestParameters["duration"] != null) {
+      formParams.append("duration", requestParameters["duration"] as any);
+    }
+
+    if (requestParameters["description"] != null) {
+      formParams.append("description", requestParameters["description"] as any);
+    }
+
+    if (requestParameters["isVip"] != null) {
+      formParams.append("isVip", requestParameters["isVip"] as any);
+    }
+
+    if (requestParameters["imgFile"] != null) {
+      formParams.append("imgFile", requestParameters["imgFile"] as any);
+    }
+
+    const response = await this.request(
+      {
+        path: `/api/v1/lessons/{id}`.replace(
+          `{${"id"}}`,
+          encodeURIComponent(String(requestParameters["id"]))
+        ),
+        method: "PUT",
+        headers: headerParameters,
+        query: queryParameters,
+        body: formParams,
+      },
+      initOverrides
+    );
+
+    return new runtime.JSONApiResponse(response, (jsonValue) =>
+      LessonEntityFromJSON(jsonValue)
+    );
+  }
+
+  /**
+   */
+  async updateLesson(
+    requestParameters: UpdateLessonRequest,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction
+  ): Promise<LessonEntity> {
+    const response = await this.updateLessonRaw(
+      requestParameters,
+      initOverrides
+    );
+    return await response.value();
+  }
 }

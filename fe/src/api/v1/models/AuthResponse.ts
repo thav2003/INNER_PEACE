@@ -12,73 +12,74 @@
  * Do not edit the class manually.
  */
 
-import { mapValues } from '../runtime';
+import { mapValues } from "../runtime";
 /**
- * 
+ *
  * @export
  * @interface AuthResponse
  */
 export interface AuthResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof AuthResponse
-     */
-    accessToken?: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof AuthResponse
-     */
-    userId?: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof AuthResponse
-     */
-    role?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof AuthResponse
-     */
-    imageUrl?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof AuthResponse
+   */
+  accessToken?: string;
+  /**
+   *
+   * @type {number}
+   * @memberof AuthResponse
+   */
+  userId?: number;
+  /**
+   *
+   * @type {string}
+   * @memberof AuthResponse
+   */
+  role?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof AuthResponse
+   */
+  imageUrl?: string;
 }
 
 /**
  * Check if a given object implements the AuthResponse interface.
  */
 export function instanceOfAuthResponse(value: object): value is AuthResponse {
-    return true;
+  return true;
 }
 
 export function AuthResponseFromJSON(json: any): AuthResponse {
-    return AuthResponseFromJSONTyped(json, false);
+  return AuthResponseFromJSONTyped(json, false);
 }
 
-export function AuthResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): AuthResponse {
-    if (json == null) {
-        return json;
-    }
-    return {
-        
-        'accessToken': json['accessToken'] == null ? undefined : json['accessToken'],
-        'userId': json['userId'] == null ? undefined : json['userId'],
-        'role': json['role'] == null ? undefined : json['role'],
-        'imageUrl': json['imageUrl'] == null ? undefined : json['imageUrl'],
-    };
+export function AuthResponseFromJSONTyped(
+  json: any,
+  ignoreDiscriminator: boolean
+): AuthResponse {
+  if (json == null) {
+    return json;
+  }
+  return {
+    accessToken:
+      json.data["accessToken"] == null ? undefined : json.data["accessToken"],
+    userId: json.data["userId"] == null ? undefined : json.data["userId"],
+    role: json.data["role"] == null ? undefined : json.data["role"],
+    imageUrl: json.data["imageUrl"] == null ? undefined : json.data["imageUrl"],
+  };
 }
 
 export function AuthResponseToJSON(value?: AuthResponse | null): any {
-    if (value == null) {
-        return value;
-    }
-    return {
-        
-        'accessToken': value['accessToken'],
-        'userId': value['userId'],
-        'role': value['role'],
-        'imageUrl': value['imageUrl'],
-    };
+  if (value == null) {
+    return value;
+  }
+  return {
+    accessToken: value["accessToken"],
+    userId: value["userId"],
+    role: value["role"],
+    imageUrl: value["imageUrl"],
+  };
 }
-

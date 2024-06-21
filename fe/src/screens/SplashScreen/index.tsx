@@ -3,17 +3,24 @@ import { useEffect } from "react";
 
 import { ActivityIndicator, View, Text, Image } from "react-native";
 import { InitialStackParamList } from "~/navigator/InitialNavigator";
+import { useAuthStore } from "~/stores/auth.store";
 import { colors } from "~/utils/colors";
 
-type Props = NativeStackScreenProps<InitialStackParamList, "Splash">;
+type Props = NativeStackScreenProps<InitialStackParamList, "SPLASH">;
 
 const SplashScreen: React.FC<Props> = ({ route, navigation }: Props) => {
+  const authStatus = useAuthStore((state) => state.status);
+
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigation.replace("App");
+      if (authStatus === "authorized") {
+        navigation.replace("APP", { screen: "HOME" });
+      } else {
+        navigation.replace("APP", { screen: "WELCOME" });
+      }
     }, 3000);
     return () => clearTimeout(timer);
-  }, [navigation]);
+  }, [navigation, authStatus]);
 
   return (
     <View
