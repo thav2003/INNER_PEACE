@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   View,
   Alert,
+  FlatList,
 } from "react-native";
 import { colors } from "~/utils/colors";
 import { useNavigation } from "@react-navigation/native";
@@ -18,82 +19,40 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import Header from "~/components/Header";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import useFetch from "~/hooks/useFetch";
-import { LessonControllerApi, LessonEntity } from "~/api/v1";
+import { LessonEntity, LessonPagedResponse } from "~/api/v1";
 import { formatImageUrl } from "~/utils/image";
+import api from "~/api";
+import { useAuthStore } from "~/stores/auth.store";
+import MoodSlider from "~/components/MoodSlider";
+import { BottomTabParamList } from "~/navigator/BottomTabNavigator";
 
-type Props = NativeStackScreenProps<AppStackParamList, "HOME">;
-const lessonControllerApi = new LessonControllerApi();
+type Props = NativeStackScreenProps<BottomTabParamList, "HOME_TAB">;
+
 const HomeScreen: React.FC<Props> = ({ navigation, route }) => {
-  const [fullName, setFullName] = useState("");
+  const profile = useAuthStore((state) => state.profile);
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
-  const [moodLevel, setMoodLevel] = useState("normal");
-  const { userId } = route.params || { userId: null };
-
-  const [loading, error, response] = useFetch(() =>
-    lessonControllerApi.searchLessons({ page: 0, size: 2 })
+  const [response] = useFetch<LessonPagedResponse>(
+    () => api.searchLessons(undefined, route.params?.page, route.params?.size),
+    route.params?.page,
+    route.params?.size
   );
+  const logoutUser = useAuthStore((state) => state.logoutUser);
+  console.log(response?.data);
+  console.log(route.params?.page);
+  console.log(route.params?.size);
+  const data = (response ? response?.data?.content : []) as Array<LessonEntity>;
 
-  const data = (response ? response : []) as Array<LessonEntity>;
-  //   console.log(data);
-  //   useEffect(() => {
-  //     const fetchUserDetails = async () => {
-  //       try {
-  //         const response = await fetch(
-  //           `http://159.223.36.234:8080/api/v1/users/${userId}`
-  //         );
-  //         if (response.ok) {
-  //           const user = await response.json();
-  //           fullName = user.fullName;
-  //           console.log(fullName);
-  //           setFullName(fullName);
-  //         } else {
-  //           throw new Error("Failed to fetch user details");
-  //         }
-  //       } catch (error) {
-  //         Alert.alert("Error", "Unable to fetch user details");
-  //         console.error(error);
-  //       }
-  //     };
-
-  //     if (userId) {
-  //       fetchUserDetails();
-  //     }
-  //   }, [userId]);
-
-  const listMediation = [
-    {
-      id: 1,
-      image: require("assets/testMediation.png"),
-      name: "Mediation Test Name 1",
-      desc: "Mediation Test Description. lorem solium epso no tiano",
-    },
-    {
-      id: 2,
-      image: require("assets/testMediation2.png"),
-      name: "Mediation Test Name 2",
-      desc: "Mediation Test Description. lorem solium epso no tiano",
-    },
-    {
-      id: 3,
-      image: require("assets/testMediation.png"),
-      name: "Mediation Test Name 3",
-      desc: "Mediation Test Description. lorem solium epso no tiano",
-    },
-    {
-      id: 4,
-      image: require("assets/testMediation2.png"),
-      name: "Mediation Test Name 4",
-      desc: "Mediation Test Description. lorem solium epso no tiano",
-    },
-  ];
-  const showedMediation = listMediation.slice(0, 2);
-
-  const handleStartNow = () => {
-    navigation.navigate("SAMPLE_MEDIATION");
+  const handleStartNow = async () => {
+    // logoutUser();
+    // navigation.navigate("SAMPLE_MEDIATION");
   };
   const handleShowMore = () => {
-    navigation.navigate("MediationTab");
+    // navigation.navigate("MediationTab");
+    navigation.setParams({
+      page: route.params?.page ? route.params?.page : 0,
+      size: route.params?.size ? route.params?.size + 2 : 2,
+    });
   };
 
   const showDatepicker = () => {
@@ -110,18 +69,21 @@ const HomeScreen: React.FC<Props> = ({ navigation, route }) => {
   };
 
   const handleItemPress = (item: LessonEntity) => {
-    navigation.navigate("LESSON_DETAIL", { lessonId: item.id });
+    navigation.navigate("LESSON_DETAIL", { lessonId: item.id! });
   };
 
-  const handleMoodChange = (mood) => {
-    setMoodLevel(mood);
+  const handleLoadMore = () => {
+    navigation.setParams({
+      page: route.params?.page ? route.params?.page + 1 : 0,
+      size: route.params?.size ? route.params?.size : 2,
+    });
   };
 
   return (
     <ScrollView style={styles.container} fadingEdgeLength={100}>
       <Header />
       <Text style={{ color: colors.primary, fontSize: 24, fontWeight: "bold" }}>
-        Xin chào, {fullName}
+        Xin chào, {profile?.fullName}
       </Text>
 
       <View
@@ -212,12 +174,45 @@ const HomeScreen: React.FC<Props> = ({ navigation, route }) => {
           )}
         </View>
         <View style={styles.feelingPicker}>
-          {/* <MoodSlider onMoodChange={handleMoodChange} /> */}
+          <MoodSlider />
         </View>
       </View>
       <View style={styles.mediationListContainer}>
         <Text style={styles.suggestionText}>Gợi ý cho bạn</Text>
-        <ListView
+        <FlatList
+          scrollEnabled={false}
+          data={data}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item }) => (
+            <View
+              style={{
+                alignItems: "center",
+                marginVertical: 8,
+              }}
+            >
+              <TouchableOpacity
+                className="w-full"
+                onPress={() => handleItemPress(item)}
+              >
+                <Image
+                  source={{
+                    uri: formatImageUrl(item.imgUrl) + "?" + new Date(),
+                  }}
+                  height={200}
+                  style={{
+                    width: "100%",
+                  }}
+                />
+              </TouchableOpacity>
+            </View>
+          )}
+          initialNumToRender={2} // how many item to display first
+          onEndReachedThreshold={2} // so when you are at 5 pixel from the bottom react run onEndReached function
+          onEndReached={() => {
+            handleLoadMore();
+          }}
+        />
+        {/* <ListView
           data={data}
           renderItem={({ item }) => (
             <View
@@ -237,7 +232,7 @@ const HomeScreen: React.FC<Props> = ({ navigation, route }) => {
             </View>
           )}
           onItemPress={handleItemPress}
-        />
+        /> */}
       </View>
       <View
         style={{

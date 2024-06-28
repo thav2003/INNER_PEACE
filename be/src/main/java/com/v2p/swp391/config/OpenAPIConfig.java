@@ -33,8 +33,6 @@ public class OpenAPIConfig {
         prodServer.setUrl(prodUrl);
         prodServer.setDescription("Server URL in Production environment");
 
-
-
         Info info = new Info()
                 .title("Backend API")
                 .version("1.0.0")
@@ -42,7 +40,7 @@ public class OpenAPIConfig {
 
         return new OpenAPI().info(info).servers(List.of(devServer, prodServer))
                 .addSecurityItem(new SecurityRequirement().
-                        addList("Bearer Authentication"))
+                        addList("BearerAuthentication"))
                 .components(new Components().addSecuritySchemes
                         ("BearerAuthentication", createAPIKeyScheme()));
     }

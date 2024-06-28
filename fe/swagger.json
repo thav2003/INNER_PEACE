@@ -3,10 +3,6 @@
     "info": {
         "title": "Backend API",
         "description": "This API exposes endpoints to manage demo.",
-        "contact": {
-            "name": "Truong Hoang Anh Vu",
-            "email": "vuthase172485@fpt.edu.vn"
-        },
         "version": "1.0.0"
     },
     "servers": [
@@ -277,9 +273,29 @@
                     "200": {
                         "description": "OK",
                         "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/LessonEntity"
+                                    "$ref": "#/components/schemas/LessonResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StringResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StringResponse"
                                 }
                             }
                         }
@@ -315,9 +331,29 @@
                     "200": {
                         "description": "OK",
                         "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/LessonEntity"
+                                    "$ref": "#/components/schemas/LessonResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StringResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StringResponse"
                                 }
                             }
                         }
@@ -342,7 +378,34 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StringResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StringResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StringResponse"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -450,27 +513,6 @@
             }
         },
         "/api/v1/lessons": {
-            "get": {
-                "tags": [
-                    "lesson-controller"
-                ],
-                "operationId": "getAllLessons",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/LessonEntity"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            },
             "post": {
                 "tags": [
                     "lesson-controller"
@@ -489,9 +531,29 @@
                     "200": {
                         "description": "OK",
                         "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/LessonEntity"
+                                    "$ref": "#/components/schemas/LessonResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StringResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StringResponse"
                                 }
                             }
                         }
@@ -689,12 +751,19 @@
                     "200": {
                         "description": "OK",
                         "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/LessonEntity"
-                                    }
+                                    "$ref": "#/components/schemas/LessonPagedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StringResponse"
                                 }
                             }
                         }
@@ -1084,28 +1153,6 @@
                     }
                 }
             },
-            "UpdateLessonRequest": {
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "type": "string"
-                    },
-                    "duration": {
-                        "type": "integer",
-                        "format": "int32"
-                    },
-                    "description": {
-                        "type": "string"
-                    },
-                    "isVip": {
-                        "type": "boolean"
-                    },
-                    "imgFile": {
-                        "type": "string",
-                        "format": "binary"
-                    }
-                }
-            },
             "LessonEntity": {
                 "type": "object",
                 "properties": {
@@ -1139,6 +1186,63 @@
                     },
                     "videoUrl": {
                         "type": "string"
+                    }
+                }
+            },
+            "LessonResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "timestamp": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/LessonEntity"
+                    }
+                }
+            },
+            "StringResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "timestamp": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "UpdateLessonRequest": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "duration": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "isVip": {
+                        "type": "boolean"
+                    },
+                    "imgFile": {
+                        "type": "string",
+                        "format": "binary"
                     }
                 }
             },
@@ -1290,6 +1394,52 @@
                     },
                     "otp": {
                         "type": "string"
+                    }
+                }
+            },
+            "LessonPagedResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "timestamp": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/PagedResponseLessonEntity"
+                    }
+                }
+            },
+            "PagedResponseLessonEntity": {
+                "type": "object",
+                "properties": {
+                    "content": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/LessonEntity"
+                        }
+                    },
+                    "page": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "size": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "totalElements": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "totalPages": {
+                        "type": "integer",
+                        "format": "int32"
                     }
                 }
             }

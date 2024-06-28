@@ -26,8 +26,8 @@ public class LessonService {
         return lessonRepository.save(lesson);
     }
 
-    public Optional<LessonEntity> getLessonById(Long id) {
-        return lessonRepository.findById(id);
+    public LessonEntity getLessonById(Long id) {
+        return lessonRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Lesson", "id", id));
     }
 
     public List<LessonEntity> getAllLessons() {
@@ -44,21 +44,20 @@ public class LessonService {
     }
 
     public void deleteLesson(Long id) {
-        lessonRepository.deleteById(id);
+        lessonRepository.delete(getLessonById(id));
     }
-    public List<LessonEntity> searchLessons(String keyword, int page, int size) {
+    public Page<LessonEntity> searchLessons(String keyword, int page, int size) {
         Pageable pageable;
         Page<LessonEntity> lessonPage;
-
+        pageable = PageRequest.of(page, size);
         if (keyword == null || keyword.isEmpty()) {
-            pageable = PageRequest.of(page, size);
+
             lessonPage = lessonRepository.findAll(pageable);
         } else {
-            pageable = PageRequest.of(page, size);
             lessonPage = lessonRepository.findByNameContainingIgnoreCase(keyword, pageable);
         }
 
-        return lessonPage.getContent();    }
+        return lessonPage;    }
 
     private ModelMapper getCustomModelMapper() {
         ModelMapper modelMapper = new ModelMapper();

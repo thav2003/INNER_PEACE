@@ -7,16 +7,20 @@ server:
     key-store-password: anhvu123
     keyStoreType: PKCS12
 spring:
-
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:sql/data.sql
   datasource:
     url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/${MYSQL_DB:thaodb}?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: ${MYSQL_USER:root}
     password: ${MYSQL_PASSWORD:03102003@Phuc}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
+    defer-datasource-initialization: true
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
       naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
     properties:
       hibernate:
@@ -61,7 +65,7 @@ app:
     host: smtp.gmail.com
     port: 587
     username: vuthase172485@fpt.edu.vn
-    password: qapy rgmx gsnm gyen
+    password: shdj jadb upaj xfbf
     properties:
       mail:
         smtp:

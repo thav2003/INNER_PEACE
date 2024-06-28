@@ -13,30 +13,31 @@ import { useNavigation } from "@react-navigation/native";
 import { colors } from "~/utils/colors";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { AppStackParamList } from "~/navigator/AppNavigator";
-import { LessonControllerApi, LessonEntity } from "~/api/v1";
+import { LessonControllerApi, LessonEntity, LessonResponse } from "~/api/v1";
 import useFetch from "~/hooks/useFetch";
 import { formatImageUrl, formatVideoUrl } from "~/utils/image";
 import { formatDuration } from "~/utils/time";
 import { Button } from "react-native-paper";
-import { ResizeMode, Video } from "expo-av";
+import { AVPlaybackStatus, ResizeMode, Video } from "expo-av";
 import { Icon } from "@rneui/themed";
 type Props = NativeStackScreenProps<AppStackParamList, "LESSON_DETAIL">;
 
 const lessonControllerApi = new LessonControllerApi();
-const LessonDetailScreen: React.FC<Props> = ({ route }) => {
+const LessonDetailScreen: React.FC<Props> = ({ route, navigation }) => {
   const { lessonId } = route.params;
+
   const [show, setShow] = useState(false);
   const screenWidth = Dimensions.get("window").width;
-  const [loading, error, response] = useFetch(() => {
-    if (lessonId) return lessonControllerApi.getLessonById({ id: lessonId });
-    return Promise.resolve();
-  }, lessonId);
+  const [response] = useFetch<LessonResponse>(
+    () => lessonControllerApi.getLessonById(lessonId),
+    lessonId
+  );
 
-  const item = response as LessonEntity;
+  const item = response?.data as LessonEntity;
 
-  const video = React.useRef(null);
-  const [status, setStatus] = React.useState({});
-  console.log(formatVideoUrl(item?.videoUrl));
+  const video = useRef(null);
+  const [status, setStatus] = React.useState<AVPlaybackStatus>();
+
   if (show) {
     return (
       <View style={styles.backgroundVideo}>
@@ -64,12 +65,11 @@ const LessonDetailScreen: React.FC<Props> = ({ route }) => {
           ref={video}
           style={styles.backgroundVideo}
           source={{
-            uri: formatVideoUrl(item?.videoUrl),
+            uri: formatVideoUrl(item?.videoUrl) + "?" + new Date(),
           }}
           useNativeControls
           resizeMode={ResizeMode.CONTAIN}
           isLooping
-          onPlaybackStatusUpdate={(status) => setStatus(() => status)}
         />
       </View>
     );
@@ -88,7 +88,7 @@ const LessonDetailScreen: React.FC<Props> = ({ route }) => {
       </View>
       <Image
         source={{
-          uri: formatImageUrl(item?.imgUrl),
+          uri: formatImageUrl(item?.imgUrl) + "?" + new Date(),
         }}
         width={screenWidth - 32}
         height={200}

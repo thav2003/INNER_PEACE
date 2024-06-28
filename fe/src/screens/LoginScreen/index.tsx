@@ -16,22 +16,22 @@ import {
 import React, { useRef, useState } from "react";
 import { colors } from "../../utils/colors";
 import { Button } from "react-native-paper";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useNavigation } from "@react-navigation/native";
 import { Icon } from "@rneui/themed";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { AppStackParamList } from "~/navigator/AppNavigator";
 import BackwardBtn from "~/components/BackwardBtn";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useAuthStore } from "~/stores/auth.store";
-import { ResponseError } from "~/api/v1";
+import { formatError } from "~/api";
+import { Formik } from "formik";
+import { InitialStackParamList } from "~/navigator/InitialNavigator";
 
 type Props = NativeStackScreenProps<AppStackParamList, "LOGIN">;
 
 const LoginScreen: React.FC<Props> = ({ route, navigation }: Props) => {
   const [loading, setLoading] = useState(false);
   const loginUser = useAuthStore((state) => state.loginUser);
-  const [email, setEmail] = useState("truonghoanganhvu04@gmail.com");
+  const [email, setEmail] = useState("admin@example.com");
   const [password, setPassword] = useState("123456");
   const [validationMessages, setValidationMessages] = useState({
     email: "",
@@ -44,7 +44,7 @@ const LoginScreen: React.FC<Props> = ({ route, navigation }: Props) => {
   };
 
   const handleForgotPw = () => {
-    // navigation.navigate("FORGOTPW");
+    navigation.navigate("FORGOT_PASSWORD");
   };
 
   const validateEmail = (email: string) => {
@@ -89,15 +89,9 @@ const LoginScreen: React.FC<Props> = ({ route, navigation }: Props) => {
         password: password,
       });
 
-      navigation.navigate("HOME");
+      navigation.navigate("SPLASH");
     } catch (error) {
-      const err = error as ResponseError;
-      const errResponse = await err.response.json();
-      if (errResponse.message) {
-        Alert.alert("Đăng nhập", errResponse.message);
-      } else {
-        Alert.alert("Lỗi mạng", "Vui lòng kiểm tra lại kết nối!");
-      }
+      Alert.alert("Đăng nhập", formatError(error));
     } finally {
       setLoading(false);
     }
@@ -128,6 +122,7 @@ const LoginScreen: React.FC<Props> = ({ route, navigation }: Props) => {
           <Image source={require("assets/sign-in-logo.png")} />
           <Text style={styles.logoText}>Mừng bạn trở lại!</Text>
         </View>
+
         <View style={styles.signInForm}>
           <TextInput
             style={styles.textInput}

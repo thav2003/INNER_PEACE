@@ -1,11 +1,12 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StateCreator, create } from "zustand";
 import { createJSONStorage, devtools, persist } from "zustand/middleware";
+import api from "~/api";
 import {
-  AuthControllerApi,
   AuthResponse,
   LoginRequest,
   SignUpRequest,
+  UserResponse,
 } from "~/api/v1";
 
 import { AuthStatus, RegisterUser, User } from "~/interfaces";
@@ -13,37 +14,51 @@ import { AuthStatus, RegisterUser, User } from "~/interfaces";
 export interface AuthState {
   status: AuthStatus;
   accessToken?: string;
-  user?: AuthResponse;
-
+  auth?: AuthResponse;
+  profile?: UserResponse;
   loginUser: (data: LoginRequest) => Promise<void>;
   logoutUser: () => void;
   registerUser: (data: SignUpRequest) => Promise<void>;
+  getProfile: () => Promise<void>;
 }
-const authControllerApi = new AuthControllerApi();
-const storeApi: StateCreator<AuthState> = (set) => ({
+const storeApi: StateCreator<AuthState> = (set, get) => ({
   status: "unauthorized",
   accessToken: undefined,
-  user: undefined,
+  auth: undefined,
+  profile: undefined,
   loginUser: async (data) => {
-    console.log(data);
+    const res = (await api.signin(data)) as any;
 
-    const res = await authControllerApi.signin({
-      loginRequest: data,
-    });
-
-    // const data = res.data.data!;
     set({
       status: "authorized",
-      accessToken: res.accessToken,
-      user: res,
+      accessToken: res.data?.data?.accessToken,
+      auth: res.data?.data,
+      profile: undefined,
     });
   },
   logoutUser: () => {
-    set({ status: "unauthorized", accessToken: undefined, user: undefined });
+    set({
+      status: "unauthorized",
+      accessToken: undefined,
+      auth: undefined,
+      profile: undefined,
+    });
   },
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   registerUser: async (data) => {
-    await authControllerApi.signup({ signUpRequest: data });
+    await api.signup(data);
+  },
+  getProfile: async () => {
+    const { accessToken } = get();
+    console.log(get());
+    const res = await api.getProfile({
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    set((state) => ({
+      ...state,
+      profile: res.data,
+    }));
   },
 });
 

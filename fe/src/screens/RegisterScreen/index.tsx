@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { colors } from "../../utils/colors";
 import { Button } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
@@ -19,10 +19,15 @@ import { Icon } from "@rneui/themed";
 import { AppStackParamList } from "~/navigator/AppNavigator";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import api, { formatError } from "~/api";
+import { useAuthStore } from "~/stores/auth.store";
+import { InitialStackParamList } from "~/navigator/InitialNavigator";
 
 type Props = NativeStackScreenProps<AppStackParamList, "REGISTER">;
 
 const RegisterScreen: React.FC<Props> = ({ route, navigation }: Props) => {
+  const registerUser = useAuthStore((state) => state.registerUser);
+  const loginUser = useAuthStore((state) => state.loginUser);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -115,54 +120,31 @@ const RegisterScreen: React.FC<Props> = ({ route, navigation }: Props) => {
       return;
     }
     try {
-      const signUpResponse = await fetch(
-        "http://159.223.36.234:8080/api/v1/auth/signup",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            fullName: fullName,
-            email: email,
-            phone: phone,
-            password: password,
-            confirmPassword: confirmPassword,
-          }),
-        }
-      );
-      const signUpData = await signUpResponse.json();
-      if (signUpResponse.ok) {
-        const signInResponse = await fetch(
-          "http://159.223.36.234:8080/api/v1/auth/signin",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              email: email,
-              password: password,
-            }),
-          }
-        );
-        const signInData = await signInResponse.json();
-        if (signInResponse.ok) {
-          Alert.alert(
-            "Đăng ký thành công",
-            "Chào mừng bạn đến với InnerPeace!~"
-          );
-          // navigation.navigate("START");
-        } else {
-          console.log(signInData.message);
-        }
-      } else {
-        console.log(signUpData.message);
-      }
+      const res = await registerUser({
+        fullName: fullName,
+        email: email,
+        phone: phone,
+        password: password,
+        confirmPassword: confirmPassword,
+      });
+      await loginUser({
+        email: email,
+        password: password,
+      });
+      Alert.alert("Thông báo", "Đăng kí thành công");
+      navigation.navigate("SPLASH");
     } catch (error) {
-      Alert.alert("Lỗi mạng", "Vui lòng kiểm tra lại kết nối!~");
+      Alert.alert("Đăng kí", formatError(error));
     }
   };
+
+  useEffect(() => {
+    setFullName("Anh Vũ");
+    setEmail("truonghoanganhvu04@gmail.com");
+    setPhone("0707943005");
+    setPassword("123456");
+    setConfirmPassword("123456");
+  }, []);
 
   return (
     <KeyboardAwareScrollView
