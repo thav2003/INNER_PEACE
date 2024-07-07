@@ -107,6 +107,7 @@ public class AuthService {
         userEntity.setPhoneNumber(request.getPhone());
         userEntity.setIsActive(true);
         userEntity.setSocialProvider(SocialProvider.DATABASE);
+        userEntity.setPurchasedPackages(List.of("Basic"));
         userRepository.save(userEntity);
     }
 

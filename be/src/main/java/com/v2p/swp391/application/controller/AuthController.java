@@ -28,7 +28,6 @@ public class AuthController {
     @PostMapping("/signin")
     public CoreApiResponse<AuthResponse> signin(
             @Valid @RequestBody LoginRequest loginRequest
-//            HttpServletResponse response
     ) {
         AuthResponse res = authService.signIn(loginRequest);
         return CoreApiResponse.success(res);

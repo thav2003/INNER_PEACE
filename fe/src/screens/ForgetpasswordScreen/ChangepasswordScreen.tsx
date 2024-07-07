@@ -14,12 +14,11 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import BackwardBtn from "~/components/BackwardBtn";
 import { colors } from "~/utils/colors";
 import { Icon } from "@rneui/themed";
-import { AppStackParamList } from "~/navigator/AppNavigator";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import api from "~/api";
 import { InitialStackParamList } from "~/navigator/InitialNavigator";
 
-type Props = NativeStackScreenProps<AppStackParamList, "CHANGE_PASSWORD">;
+type Props = NativeStackScreenProps<InitialStackParamList, "CHANGE_PASSWORD">;
 const ChangepasswordScreen: React.FC<Props> = ({ navigation, route }) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");

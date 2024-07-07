@@ -16,13 +16,13 @@ import BackwardBtn from "~/components/BackwardBtn";
 import { colors } from "~/utils/colors";
 import { Icon } from "@rneui/themed";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { AppStackParamList } from "~/navigator/AppNavigator";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import api from "~/api";
+import { InitialStackParamList } from "~/navigator/InitialNavigator";
 
-type Props = NativeStackScreenProps<AppStackParamList, "FORGOT_PASSWORD">;
+type Props = NativeStackScreenProps<InitialStackParamList, "FORGOT_PASSWORD">;
 const ForgetpasswordScreen: React.FC<Props> = ({ navigation }) => {
-  const [email, setEmail] = useState("truonghoanganhvu04@gmail.com");
+  const [email, setEmail] = useState("xuanthaonguyen137202@gmail.com");
   const [emailError, setEmailError] = useState("");
   const [emailExistsError, setEmailExistsError] = useState("");
   const [password, setPassword] = useState("");

@@ -16,14 +16,13 @@ import { Button } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import BackwardBtn from "../../components/BackwardBtn";
 import { Icon } from "@rneui/themed";
-import { AppStackParamList } from "~/navigator/AppNavigator";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import api, { formatError } from "~/api";
 import { useAuthStore } from "~/stores/auth.store";
 import { InitialStackParamList } from "~/navigator/InitialNavigator";
 
-type Props = NativeStackScreenProps<AppStackParamList, "REGISTER">;
+type Props = NativeStackScreenProps<InitialStackParamList, "REGISTER">;
 
 const RegisterScreen: React.FC<Props> = ({ route, navigation }: Props) => {
   const registerUser = useAuthStore((state) => state.registerUser);
@@ -139,9 +138,9 @@ const RegisterScreen: React.FC<Props> = ({ route, navigation }: Props) => {
   };
 
   useEffect(() => {
-    setFullName("Anh Vũ");
-    setEmail("truonghoanganhvu04@gmail.com");
-    setPhone("0707943005");
+    setFullName("Xuan Thao");
+    setEmail("xuanthaonguyen137202@gmail.com");
+    setPhone("1234567890");
     setPassword("123456");
     setConfirmPassword("123456");
   }, []);

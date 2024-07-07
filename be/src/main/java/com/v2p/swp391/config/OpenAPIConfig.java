@@ -17,32 +17,26 @@ import java.util.List;
 @Configuration
 @RequiredArgsConstructor
 public class OpenAPIConfig {
-    @Value("${app.openapi.dev-url}")
-    private String devUrl;
 
-    @Value("${app.openapi.prod-url}")
-    private String prodUrl;
+    @Value("${app.openapi.server}")
+    private String serverUrl;
+
 
     @Bean
     public OpenAPI myOpenAPI() {
-        Server devServer = new Server();
-        devServer.setUrl(devUrl);
-        devServer.setDescription("Server URL in Development environment");
-
-        Server prodServer = new Server();
-        prodServer.setUrl(prodUrl);
-        prodServer.setDescription("Server URL in Production environment");
+        Server server = new Server();
+        server.setUrl(serverUrl);
 
         Info info = new Info()
                 .title("Backend API")
                 .version("1.0.0")
                 .description("This API exposes endpoints to manage demo.");
 
-        return new OpenAPI().info(info).servers(List.of(devServer, prodServer))
+        return new OpenAPI().info(info).servers(List.of(server))
                 .addSecurityItem(new SecurityRequirement().
-                        addList("BearerAuthentication"))
+                        addList("Bearer_Authentication"))
                 .components(new Components().addSecuritySchemes
-                        ("BearerAuthentication", createAPIKeyScheme()));
+                        ("Bearer_Authentication", createAPIKeyScheme()));
     }
 
     private SecurityScheme createAPIKeyScheme() {

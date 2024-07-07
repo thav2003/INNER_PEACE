@@ -19,11 +19,23 @@
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
-<!--		<dependency>-->
-<!--			<groupId>com.github.javafaker</groupId>-->
-<!--			<artifactId>javafaker</artifactId>-->
-<!--			<version>0.15</version>-->
-<!--		</dependency>-->
+		<dependency>
+			<groupId>io.socket</groupId>
+			<artifactId>socket.io-server</artifactId>
+			<version>4.0.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.corundumstudio.socketio</groupId>
+			<artifactId>netty-socketio</artifactId>
+			<version>2.0.9</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.github.kilmajster</groupId>
+			<artifactId>ngrok-spring-boot-starter</artifactId>
+			<version>0.9.2</version>
+		</dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
@@ -87,13 +99,6 @@
 			<artifactId>jjwt-jackson</artifactId>
 			<version>0.11.2</version>
 			<scope>runtime</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<scope>runtime</scope>
-			<optional>true</optional>
 		</dependency>
 
 		<dependency>

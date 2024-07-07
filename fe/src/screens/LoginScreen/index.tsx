@@ -18,7 +18,6 @@ import { colors } from "../../utils/colors";
 import { Button } from "react-native-paper";
 import { Icon } from "@rneui/themed";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { AppStackParamList } from "~/navigator/AppNavigator";
 import BackwardBtn from "~/components/BackwardBtn";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useAuthStore } from "~/stores/auth.store";
@@ -26,7 +25,7 @@ import { formatError } from "~/api";
 import { Formik } from "formik";
 import { InitialStackParamList } from "~/navigator/InitialNavigator";
 
-type Props = NativeStackScreenProps<AppStackParamList, "LOGIN">;
+type Props = NativeStackScreenProps<InitialStackParamList, "LOGIN">;
 
 const LoginScreen: React.FC<Props> = ({ route, navigation }: Props) => {
   const [loading, setLoading] = useState(false);

@@ -7,17 +7,12 @@
     },
     "servers": [
         {
-            "url": "http://localhost:8080",
-            "description": "Server URL in Development environment"
-        },
-        {
-            "url": "http://159.223.36.234:8080",
-            "description": "Server URL in Production environment"
+            "url": "http://localhost:8080"
         }
     ],
     "security": [
         {
-            "BearerAuthentication": []
+            "Bearer_Authentication": []
         }
     ],
     "paths": {
@@ -113,98 +108,6 @@
                 }
             }
         },
-        "/api/v1/recipes/{id}": {
-            "get": {
-                "tags": [
-                    "recipe-controller"
-                ],
-                "operationId": "getRecipeById",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "format": "int64"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/RecipeEntity"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "put": {
-                "tags": [
-                    "recipe-controller"
-                ],
-                "operationId": "updateRecipe",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "format": "int64"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/RecipeEntity"
-                            }
-                        }
-                    },
-                    "required": true
-                },
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/RecipeEntity"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "tags": [
-                    "recipe-controller"
-                ],
-                "operationId": "deleteRecipeById",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "format": "int64"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
-                }
-            }
-        },
         "/api/v1/profile": {
             "get": {
                 "tags": [
@@ -245,6 +148,66 @@
                             "*/*": {
                                 "schema": {
                                     "$ref": "#/components/schemas/UserResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/payment/{orderId}": {
+            "get": {
+                "tags": [
+                    "payment-controller"
+                ],
+                "operationId": "getOrderById",
+                "parameters": [
+                    {
+                        "name": "orderId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "payment-controller"
+                ],
+                "operationId": "cancelOrder",
+                "parameters": [
+                    {
+                        "name": "orderId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
                                 }
                             }
                         }
@@ -410,6 +373,78 @@
                 }
             }
         },
+        "/api/v1/daily-meal-plans": {
+            "get": {
+                "tags": [
+                    "daily-meal-plan-controller"
+                ],
+                "operationId": "getDailyMealPlansByUserAndDate",
+                "parameters": [
+                    {
+                        "name": "date",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "2024-07-03"
+                        },
+                        "example": "2024-07-03"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DailyMealPlanResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "daily-meal-plan-controller"
+                ],
+                "operationId": "updateDailyMealPlans",
+                "parameters": [
+                    {
+                        "name": "date",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "2024-07-03"
+                        },
+                        "example": "2024-07-03"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/DailyMealPlanDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DailyMealPlanResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/users": {
             "get": {
                 "tags": [
@@ -461,38 +496,17 @@
                 }
             }
         },
-        "/api/v1/recipes": {
-            "get": {
-                "tags": [
-                    "recipe-controller"
-                ],
-                "operationId": "getAllRecipes",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/RecipeEntity"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            },
+        "/api/v1/payment/ipn": {
             "post": {
                 "tags": [
-                    "recipe-controller"
+                    "payment-controller"
                 ],
-                "operationId": "createRecipe",
+                "operationId": "payosTransferHandler",
                 "requestBody": {
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/RecipeEntity"
+                                "type": "object"
                             }
                         }
                     },
@@ -504,7 +518,70 @@
                         "content": {
                             "*/*": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/RecipeEntity"
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/payment/create": {
+            "post": {
+                "tags": [
+                    "payment-controller"
+                ],
+                "operationId": "createPaymentLink",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PaymentRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/payment/confirm-webhook": {
+            "post": {
+                "tags": [
+                    "payment-controller"
+                ],
+                "operationId": "confirmWebhook",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "additionalProperties": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
                                 }
                             }
                         }
@@ -534,6 +611,66 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/LessonResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StringResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StringResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/lessons/watched/{userId}/{lessonId}": {
+            "post": {
+                "tags": [
+                    "lesson-controller"
+                ],
+                "operationId": "markLessonAsWatched",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "lessonId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StringResponse"
                                 }
                             }
                         }
@@ -711,6 +848,67 @@
                 }
             }
         },
+        "/api/v1/lessons/watched/{userId}": {
+            "get": {
+                "tags": [
+                    "lesson-controller"
+                ],
+                "operationId": "getWatchedLessons",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "size",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserLessonPagedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StringResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/lessons/search": {
             "get": {
                 "tags": [
@@ -764,6 +962,30 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/StringResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/daily-meal-plans/summaryByMonth": {
+            "get": {
+                "tags": [
+                    "daily-meal-plan-controller"
+                ],
+                "operationId": "getNutritionSummaryForCurrentMonth",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                        "type": "integer",
+                                        "format": "int64"
+                                    }
                                 }
                             }
                         }
@@ -842,299 +1064,16 @@
                     },
                     "providerId": {
                         "type": "string"
-                    }
-                }
-            },
-            "CaloricBreakdown": {
-                "type": "object",
-                "properties": {
-                    "percentProtein": {
-                        "type": "number",
-                        "format": "double"
                     },
-                    "percentFat": {
-                        "type": "number",
-                        "format": "double"
-                    },
-                    "percentCarbs": {
-                        "type": "number",
-                        "format": "double"
-                    }
-                }
-            },
-            "Equipment": {
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "type": "string"
-                    },
-                    "localizedName": {
-                        "type": "string"
-                    },
-                    "image": {
-                        "type": "string"
-                    }
-                }
-            },
-            "Flavonoid": {
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "type": "string"
-                    },
-                    "amount": {
-                        "type": "number",
-                        "format": "double"
-                    },
-                    "unit": {
-                        "type": "string"
-                    }
-                }
-            },
-            "IngredientEntity": {
-                "type": "object",
-                "properties": {
                     "createdAt": {
                         "type": "string",
                         "format": "date-time"
                     },
-                    "updatedAt": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    "id": {
-                        "type": "integer",
-                        "format": "int64"
-                    },
-                    "name": {
-                        "type": "string"
-                    },
-                    "localizedName": {
-                        "type": "string"
-                    },
-                    "image": {
-                        "type": "string"
-                    },
-                    "amount": {
-                        "type": "number",
-                        "format": "double"
-                    },
-                    "unit": {
-                        "type": "string"
-                    },
-                    "nutrients": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/Nutrient"
-                        }
-                    }
-                }
-            },
-            "InstructionDuration": {
-                "type": "object",
-                "properties": {
-                    "number": {
-                        "type": "integer",
-                        "format": "int32"
-                    },
-                    "unit": {
-                        "type": "string"
-                    }
-                }
-            },
-            "InstructionEntity": {
-                "type": "object",
-                "properties": {
-                    "createdAt": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    "updatedAt": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    "id": {
-                        "type": "integer",
-                        "format": "int64"
-                    },
-                    "number": {
-                        "type": "integer",
-                        "format": "int32"
-                    },
-                    "step": {
-                        "type": "string"
-                    },
-                    "ingredients": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/IngredientEntity"
-                        }
-                    },
-                    "equipment": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/Equipment"
-                        }
-                    },
-                    "length": {
-                        "$ref": "#/components/schemas/InstructionDuration"
-                    }
-                }
-            },
-            "Nutrient": {
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "type": "string"
-                    },
-                    "amount": {
-                        "type": "number",
-                        "format": "double"
-                    },
-                    "unit": {
-                        "type": "string"
-                    },
-                    "percentOfDailyNeeds": {
-                        "type": "number",
-                        "format": "double"
-                    }
-                }
-            },
-            "Nutrition": {
-                "type": "object",
-                "properties": {
-                    "nutrients": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/Nutrient"
-                        }
-                    },
-                    "properties": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/Property"
-                        }
-                    },
-                    "flavonoids": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/Flavonoid"
-                        }
-                    },
-                    "ingredients": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/IngredientEntity"
-                        }
-                    },
-                    "caloricBreakdown": {
-                        "$ref": "#/components/schemas/CaloricBreakdown"
-                    },
-                    "weightPerServing": {
-                        "$ref": "#/components/schemas/WeightPerServing"
-                    }
-                }
-            },
-            "Property": {
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "type": "string"
-                    },
-                    "amount": {
-                        "type": "number",
-                        "format": "double"
-                    },
-                    "unit": {
-                        "type": "string"
-                    }
-                }
-            },
-            "RecipeEntity": {
-                "type": "object",
-                "properties": {
-                    "createdAt": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    "updatedAt": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    "id": {
-                        "type": "integer",
-                        "format": "int64"
-                    },
-                    "title": {
-                        "type": "string"
-                    },
-                    "readyInMinutes": {
-                        "type": "integer",
-                        "format": "int32"
-                    },
-                    "servings": {
-                        "type": "integer",
-                        "format": "int32"
-                    },
-                    "sourceUrl": {
-                        "type": "string"
-                    },
-                    "image": {
-                        "type": "string"
-                    },
-                    "imageType": {
-                        "type": "string"
-                    },
-                    "nutrition": {
-                        "$ref": "#/components/schemas/Nutrition"
-                    },
-                    "summary": {
-                        "type": "string"
-                    },
-                    "cuisines": {
+                    "purchasedPackages": {
                         "type": "array",
                         "items": {
                             "type": "string"
                         }
-                    },
-                    "dishTypes": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
-                    },
-                    "diets": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
-                    },
-                    "occasions": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
-                    },
-                    "instructions": {
-                        "type": "string"
-                    },
-                    "analyzedInstructions": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/InstructionEntity"
-                        }
-                    }
-                }
-            },
-            "WeightPerServing": {
-                "type": "object",
-                "properties": {
-                    "amount": {
-                        "type": "number",
-                        "format": "double"
-                    },
-                    "unit": {
-                        "type": "string"
                     }
                 }
             },
@@ -1153,17 +1092,9 @@
                     }
                 }
             },
-            "LessonEntity": {
+            "LessonDto": {
                 "type": "object",
                 "properties": {
-                    "createdAt": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    "updatedAt": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
                     "id": {
                         "type": "integer",
                         "format": "int64"
@@ -1178,14 +1109,17 @@
                     "description": {
                         "type": "string"
                     },
-                    "isVip": {
-                        "type": "boolean"
-                    },
                     "imgUrl": {
                         "type": "string"
                     },
                     "videoUrl": {
                         "type": "string"
+                    },
+                    "categories": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
                     }
                 }
             },
@@ -1204,7 +1138,7 @@
                         "format": "int64"
                     },
                     "data": {
-                        "$ref": "#/components/schemas/LessonEntity"
+                        "$ref": "#/components/schemas/LessonDto"
                     }
                 }
             },
@@ -1246,6 +1180,99 @@
                     }
                 }
             },
+            "DailyMealPlanDto": {
+                "type": "object",
+                "properties": {
+                    "breakfast": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/MealDto"
+                        }
+                    },
+                    "lunch": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/MealDto"
+                        }
+                    },
+                    "dinner": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/MealDto"
+                        }
+                    },
+                    "nutrients": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Nutrient"
+                        }
+                    }
+                }
+            },
+            "DailyMealPlanResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "timestamp": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/DailyMealPlanDto"
+                    }
+                }
+            },
+            "MealDto": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "meal_id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "quantity": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "unit": {
+                        "type": "string"
+                    },
+                    "typeFood": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Nutrient": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "amount": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "unit": {
+                        "type": "string"
+                    },
+                    "percentOfDailyNeeds": {
+                        "type": "number",
+                        "format": "double"
+                    }
+                }
+            },
             "CreateUserRequest": {
                 "type": "object",
                 "properties": {
@@ -1268,6 +1295,27 @@
                             "MANAGER",
                             "CUSTOMER"
                         ]
+                    }
+                }
+            },
+            "PaymentRequest": {
+                "type": "object",
+                "properties": {
+                    "productName": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "returnUrl": {
+                        "type": "string"
+                    },
+                    "price": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "cancelUrl": {
+                        "type": "string"
                     }
                 }
             },
@@ -1336,10 +1384,12 @@
                 "type": "object",
                 "properties": {
                     "email": {
-                        "type": "string"
+                        "type": "string",
+                        "example": "admin@example.com"
                     },
                     "password": {
-                        "type": "string"
+                        "type": "string",
+                        "example": "123456"
                     }
                 }
             },
@@ -1397,6 +1447,137 @@
                     }
                 }
             },
+            "LessonCategoryEntity": {
+                "type": "object",
+                "properties": {
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "parent": {
+                        "$ref": "#/components/schemas/LessonCategoryEntity"
+                    },
+                    "children": {
+                        "uniqueItems": true,
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/LessonCategoryEntity"
+                        }
+                    }
+                }
+            },
+            "LessonEntity": {
+                "type": "object",
+                "properties": {
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "duration": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "imgUrl": {
+                        "type": "string"
+                    },
+                    "videoUrl": {
+                        "type": "string"
+                    },
+                    "categories": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/LessonCategoryEntity"
+                        }
+                    }
+                }
+            },
+            "PagedResponseUserLessonResponse": {
+                "type": "object",
+                "properties": {
+                    "content": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/UserLessonResponse"
+                        }
+                    },
+                    "page": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "size": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "totalElements": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "totalPages": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "UserLessonPagedResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "timestamp": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/PagedResponseUserLessonResponse"
+                    }
+                }
+            },
+            "UserLessonResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "lesson": {
+                        "$ref": "#/components/schemas/LessonEntity"
+                    },
+                    "watchedMillis": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
             "LessonPagedResponse": {
                 "type": "object",
                 "properties": {
@@ -1412,17 +1593,17 @@
                         "format": "int64"
                     },
                     "data": {
-                        "$ref": "#/components/schemas/PagedResponseLessonEntity"
+                        "$ref": "#/components/schemas/PagedResponseLessonDto"
                     }
                 }
             },
-            "PagedResponseLessonEntity": {
+            "PagedResponseLessonDto": {
                 "type": "object",
                 "properties": {
                     "content": {
                         "type": "array",
                         "items": {
-                            "$ref": "#/components/schemas/LessonEntity"
+                            "$ref": "#/components/schemas/LessonDto"
                         }
                     },
                     "page": {
@@ -1445,7 +1626,7 @@
             }
         },
         "securitySchemes": {
-            "BearerAuthentication": {
+            "Bearer_Authentication": {
                 "type": "http",
                 "scheme": "bearer",
                 "bearerFormat": "JWT"

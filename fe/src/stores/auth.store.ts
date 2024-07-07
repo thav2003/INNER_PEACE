@@ -48,11 +48,9 @@ const storeApi: StateCreator<AuthState> = (set, get) => ({
     await api.signup(data);
   },
   getProfile: async () => {
-    const { accessToken } = get();
-    console.log(get());
     const res = await api.getProfile({
       headers: {
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${get().accessToken}`,
       },
     });
     set((state) => ({
@@ -68,3 +66,4 @@ export const useAuthStore = create<AuthState>()(
     storage: createJSONStorage(() => AsyncStorage),
   })
 );
+export const { getState, setState, subscribe, getInitialState } = useAuthStore;

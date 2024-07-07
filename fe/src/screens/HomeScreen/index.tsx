@@ -1,58 +1,43 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import {
   Image,
-  ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
-  Alert,
   FlatList,
+  ActivityIndicator,
 } from "react-native";
 import { colors } from "~/utils/colors";
-import { useNavigation } from "@react-navigation/native";
 
-import ListView from "~/components/ListView";
-import { AppStackParamList } from "~/navigator/AppNavigator";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import Header from "~/components/Header";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import useFetch from "~/hooks/useFetch";
-import { LessonEntity, LessonPagedResponse } from "~/api/v1";
+import { LessonDto, LessonEntity, LessonPagedResponse } from "~/api/v1";
 import { formatImageUrl } from "~/utils/image";
-import api from "~/api";
+import api, { spoonacularApi } from "~/api";
 import { useAuthStore } from "~/stores/auth.store";
 import MoodSlider from "~/components/MoodSlider";
-import { BottomTabParamList } from "~/navigator/BottomTabNavigator";
+import { HomeParamList } from "~/navigator/HomeNavigator";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import MainLayout from "~/layouts/MainLayout";
+import ListItem from "~/components/ListLessonItem";
 
-type Props = NativeStackScreenProps<BottomTabParamList, "HOME_TAB">;
+type Props = NativeStackScreenProps<HomeParamList, "HOME_TAB">;
 
+const size = 2;
 const HomeScreen: React.FC<Props> = ({ navigation, route }) => {
+  const [page, setPage] = useState<number>(0);
   const profile = useAuthStore((state) => state.profile);
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
-  const [response] = useFetch<LessonPagedResponse>(
-    () => api.searchLessons(undefined, route.params?.page, route.params?.size),
-    route.params?.page,
-    route.params?.size
-  );
-  const logoutUser = useAuthStore((state) => state.logoutUser);
-  console.log(response?.data);
-  console.log(route.params?.page);
-  console.log(route.params?.size);
-  const data = (response ? response?.data?.content : []) as Array<LessonEntity>;
+
+  const [initLoading, setInitLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [list, setList] = useState<LessonDto[]>([]);
 
   const handleStartNow = async () => {
-    // logoutUser();
-    // navigation.navigate("SAMPLE_MEDIATION");
-  };
-  const handleShowMore = () => {
-    // navigation.navigate("MediationTab");
-    navigation.setParams({
-      page: route.params?.page ? route.params?.page : 0,
-      size: route.params?.size ? route.params?.size + 2 : 2,
-    });
+    navigation.navigate("MEDIATION_TAB");
   };
 
   const showDatepicker = () => {
@@ -68,19 +53,37 @@ const HomeScreen: React.FC<Props> = ({ navigation, route }) => {
     });
   };
 
-  const handleItemPress = (item: LessonEntity) => {
-    navigation.navigate("LESSON_DETAIL", { lessonId: item.id! });
-  };
-
   const handleLoadMore = () => {
-    navigation.setParams({
-      page: route.params?.page ? route.params?.page + 1 : 0,
-      size: route.params?.size ? route.params?.size : 2,
+    setLoading(true);
+    api.searchLessons(undefined, page, size).then((res) => {
+      const content = res ? (res.data.data?.content as LessonDto[]) : [];
+      setLoading(false);
+      console.log(content);
+      console.log("Chay");
+      setList((prev) => [...prev, ...content]);
+      setPage((prev) => ++prev);
     });
   };
+  // useEffect(() => {
+  //   const test = async () => {
+  //     const res = await spoonacularApi.searchAllFood("banana", 1, 10);
+  //     reactotron.log("HELLO WORLD");
+  //     reactotron.log(res.data);
+  //   };
+  //   test();
+  // }, []);
+
+  useEffect(() => {
+    api.searchLessons(undefined, page, size).then((res) => {
+      const content = res ? (res.data.data?.content as LessonDto[]) : [];
+      setInitLoading(false);
+      setList(content);
+      setPage((prev) => ++prev);
+    });
+  }, []);
 
   return (
-    <ScrollView style={styles.container} fadingEdgeLength={100}>
+    <MainLayout style={styles.container}>
       <Header />
       <Text style={{ color: colors.primary, fontSize: 24, fontWeight: "bold" }}>
         Xin chào, {profile?.fullName}
@@ -181,85 +184,51 @@ const HomeScreen: React.FC<Props> = ({ navigation, route }) => {
         <Text style={styles.suggestionText}>Gợi ý cho bạn</Text>
         <FlatList
           scrollEnabled={false}
-          data={data}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item }) => (
-            <View
-              style={{
-                alignItems: "center",
-                marginVertical: 8,
-              }}
-            >
-              <TouchableOpacity
-                className="w-full"
-                onPress={() => handleItemPress(item)}
-              >
-                <Image
-                  source={{
-                    uri: formatImageUrl(item.imgUrl) + "?" + new Date(),
-                  }}
-                  height={200}
-                  style={{
-                    width: "100%",
-                  }}
-                />
-              </TouchableOpacity>
-            </View>
-          )}
-          initialNumToRender={2} // how many item to display first
-          onEndReachedThreshold={2} // so when you are at 5 pixel from the bottom react run onEndReached function
-          onEndReached={() => {
-            handleLoadMore();
-          }}
+          data={list}
+          extraData={list}
+          ListEmptyComponent={
+            initLoading ? (
+              <ActivityIndicator animating={true} />
+            ) : (
+              <View style={{ flex: 1 }}>
+                <Text>0 results</Text>
+              </View>
+            )
+          }
+          // onEndReachedThreshold={0.5}
+          // onEndReached={handleShowMore}
+          keyExtractor={(item) => item.id!.toString()}
+          renderItem={({ item }) => <ListItem item={item} />}
+          // initialNumToRender={2} // how many item to display first
+          // onEndReachedThreshold={2} // so when you are at 5 pixel from the bottom react run onEndReached function
+          // onEndReached={() => {
+          //   handleLoadMore();
+          // }}
         />
-        {/* <ListView
-          data={data}
-          renderItem={({ item }) => (
-            <View
-              style={{
-                alignItems: "center",
-              }}
-            >
-              <Image
-                source={{
-                  uri: formatImageUrl(item.imgUrl),
-                }}
-                height={200}
-                style={{
-                  width: "100%",
-                }}
-              />
-            </View>
-          )}
-          onItemPress={handleItemPress}
-        /> */}
       </View>
-      <View
-        style={{
-          justifyContent: "center",
-          alignItems: "center",
-          marginTop: 20,
-        }}
-      >
-        <TouchableOpacity
-          onPress={handleShowMore}
-          activeOpacity={0.9}
-          style={styles.showMoreBtn}
+
+      {!loading && !initLoading ? (
+        <View
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: 20,
+          }}
         >
-          <Text
-            style={{ color: colors.white, fontSize: 16, fontWeight: "bold" }}
+          <TouchableOpacity
+            onPress={handleLoadMore}
+            activeOpacity={0.9}
+            style={styles.showMoreBtn}
           >
-            Xem thêm
-          </Text>
-        </TouchableOpacity>
-      </View>
-      <View
-        style={{
-          flex: 1,
-          marginBottom: 130,
-        }}
-      ></View>
-    </ScrollView>
+            <Text
+              style={{ color: colors.white, fontSize: 16, fontWeight: "bold" }}
+            >
+              Xem thêm
+            </Text>
+          </TouchableOpacity>
+        </View>
+      ) : null}
+    </MainLayout>
   );
 };
 
@@ -295,6 +264,7 @@ const styles = StyleSheet.create({
   },
   mediationListContainer: {
     marginTop: 20,
+    flex: 1,
   },
   showMoreBtn: {
     backgroundColor: colors.primary,

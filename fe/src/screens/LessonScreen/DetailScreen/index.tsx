@@ -9,10 +9,8 @@ import {
   TouchableOpacity,
 } from "react-native";
 import BackwardBtn from "~/components/BackwardBtn";
-import { useNavigation } from "@react-navigation/native";
 import { colors } from "~/utils/colors";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { AppStackParamList } from "~/navigator/AppNavigator";
 import { LessonControllerApi, LessonEntity, LessonResponse } from "~/api/v1";
 import useFetch from "~/hooks/useFetch";
 import { formatImageUrl, formatVideoUrl } from "~/utils/image";
@@ -20,60 +18,21 @@ import { formatDuration } from "~/utils/time";
 import { Button } from "react-native-paper";
 import { AVPlaybackStatus, ResizeMode, Video } from "expo-av";
 import { Icon } from "@rneui/themed";
-type Props = NativeStackScreenProps<AppStackParamList, "LESSON_DETAIL">;
+import { HomeParamList } from "~/navigator/HomeNavigator";
+import { AppParamList } from "~/navigator/AppNavigator";
+type Props = NativeStackScreenProps<AppParamList, "LESSON_DETAIL">;
 
 const lessonControllerApi = new LessonControllerApi();
 const LessonDetailScreen: React.FC<Props> = ({ route, navigation }) => {
-  const { lessonId } = route.params;
-
-  const [show, setShow] = useState(false);
+  const { lessonId, historyLesson } = route.params;
   const screenWidth = Dimensions.get("window").width;
   const [response] = useFetch<LessonResponse>(
-    () => lessonControllerApi.getLessonById(lessonId),
+    { fetchFunction: () => lessonControllerApi.getLessonById(lessonId) },
     lessonId
   );
 
   const item = response?.data as LessonEntity;
 
-  const video = useRef(null);
-  const [status, setStatus] = React.useState<AVPlaybackStatus>();
-
-  if (show) {
-    return (
-      <View style={styles.backgroundVideo}>
-        <View>
-          <TouchableOpacity
-            style={{
-              backgroundColor: colors.white,
-              top: 40,
-              right: 10,
-              position: "absolute",
-              borderRadius: 50,
-              zIndex: 1000,
-            }}
-            onPress={() => setShow(false)}
-          >
-            <Icon
-              name={"close-outline"}
-              color={colors.primary}
-              size={40}
-              type={"ionicon"}
-            />
-          </TouchableOpacity>
-        </View>
-        <Video
-          ref={video}
-          style={styles.backgroundVideo}
-          source={{
-            uri: formatVideoUrl(item?.videoUrl) + "?" + new Date(),
-          }}
-          useNativeControls
-          resizeMode={ResizeMode.CONTAIN}
-          isLooping
-        />
-      </View>
-    );
-  }
   return (
     <View style={styles.container}>
       <View>
@@ -106,7 +65,13 @@ const LessonDetailScreen: React.FC<Props> = ({ route, navigation }) => {
           icon="play"
           mode="contained"
           buttonColor={colors.secondary}
-          onPress={() => setShow(true)}
+          onPress={() =>
+            navigation.navigate("LESSON_VIDEO", {
+              videoUrl: formatVideoUrl(item.videoUrl) + "?" + new Date(),
+              lessonId: lessonId,
+              currentTime: historyLesson?.watchedMillis,
+            })
+          }
         >
           Tập ngay
         </Button>

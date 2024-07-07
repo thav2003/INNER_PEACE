@@ -14,10 +14,10 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import BackwardBtn from "~/components/BackwardBtn";
 import { colors } from "~/utils/colors";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { AppStackParamList } from "~/navigator/AppNavigator";
 import api from "~/api";
+import { InitialStackParamList } from "~/navigator/InitialNavigator";
 
-type Props = NativeStackScreenProps<AppStackParamList, "OTP">;
+type Props = NativeStackScreenProps<InitialStackParamList, "OTP">;
 const OtpScreen: React.FC<Props> = ({ navigation, route }) => {
   const [otp, setOtp] = useState(["", "", "", ""]);
   const [otpError, setOtpError] = useState("");

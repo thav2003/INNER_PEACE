@@ -9,8 +9,9 @@ import {
   View,
   Image,
   Dimensions,
+  ActivityIndicator,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { colors } from "~/utils/colors";
 //   import Footer from "~/components/Footer";
 import { useNavigation } from "@react-navigation/native";
@@ -20,59 +21,54 @@ import ListView from "~/components/ListView";
 import Header from "~/components/Header";
 //   import FlexMediationList from "~/components/FlexMediationList";
 import { Icon } from "@rneui/themed";
-import { BottomTabParamList } from "~/navigator/BottomTabNavigator";
+import { HomeParamList } from "~/navigator/HomeNavigator";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import MainLayout from "~/layouts/MainLayout";
+import useFetch from "~/hooks/useFetch";
+import api from "~/api";
+import { useAuthStore } from "~/stores/auth.store";
+import { formatImageUrl } from "~/utils/image";
+import ListLessonItem from "~/components/ListLessonItem";
+import { LessonDto, LessonEntity } from "~/api/v1";
+import axios from "axios";
 
-type Props = NativeStackScreenProps<BottomTabParamList, "MEDIATION_TAB">;
-
+type Props = NativeStackScreenProps<HomeParamList, "MEDIATION_TAB">;
+const size = 2;
 const MediationScreen: React.FC<Props> = ({ navigation }) => {
+  const userId = useAuthStore((state) => state.auth?.userId);
+  const [page, setPage] = useState<number>(0);
+  const [initLoading, setInitLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [list, setList] = useState<LessonDto[]>([]);
+
+  const [responseOldLesson] = useFetch({
+    fetchFunction: () => api.getWatchedLessons(userId!, 0, 2),
+  });
+
   const [searchQuery, setSearchQuery] = useState("");
   const handleToLike = () => {};
   const handleToMediation = () => {};
   const handleToStress = () => {};
 
-  const listMediation = [
-    {
-      id: 1,
-      image: require("assets/testMediation.png"),
-      name: "Mediation Test Name 1",
-      desc: "Mediation Test Description. lorem solium epso no tiano",
-    },
-    {
-      id: 2,
-      image: require("assets/testMediation2.png"),
-      name: "Mediation Test Name 2",
-      desc: "Mediation Test Description. lorem solium epso no tiano",
-    },
-    {
-      id: 3,
-      image: require("assets/testMediation.png"),
-      name: "Mediation Test Name 2",
-      desc: "Mediation Test Description. lorem solium epso no tiano",
-    },
-    {
-      id: 4,
-      image: require("assets/testMediation2.png"),
-      name: "Mediation Test Name 2",
-      desc: "Mediation Test Description. lorem solium epso no tiano",
-    },
-    {
-      id: 5,
-      image: require("assets/testMediation.png"),
-      name: "Mediation Test Name 2",
-      desc: "Mediation Test Description. lorem solium epso no tiano",
-    },
-    {
-      id: 6,
-      image: require("assets/testMediation2.png"),
-      name: "Mediation Test Name 2",
-      desc: "Mediation Test Description. lorem solium epso no tiano",
-    },
-  ];
-  const showedMediation = listMediation.slice(0, 2);
+  const handleLoadMore = () => {
+    setLoading(true);
+    api.searchLessons(undefined, page, size).then((res) => {
+      const content = res ? (res.data.data?.content as LessonDto[]) : [];
+      setLoading(false);
+      setList((prev) => [...prev, ...content]);
+      setPage((prev) => ++prev);
+    });
+  };
+  useEffect(() => {
+    api.searchLessons(undefined, page, size).then((res) => {
+      const content = res ? (res.data.data?.content as LessonDto[]) : [];
+      setInitLoading(false);
+      setList(content);
+      setPage((prev) => ++prev);
+    });
+  }, []);
   return (
-    <ScrollView style={styles.container}>
-      <StatusBar />
+    <MainLayout style={styles.container}>
       <Header />
       <View style={{ flexDirection: "row", marginBottom: 10 }}>
         <Text style={styles.title}>Cùng thư giản nào</Text>
@@ -105,10 +101,10 @@ const MediationScreen: React.FC<Props> = ({ navigation }) => {
           }}
         />
       </View>
-      <View>
+      <View className="flex flex-col gap-5 mb-5">
         <ImageBackground
           source={require("assets/media-exe.png")}
-          resizeMode="contain"
+          resizeMode="cover"
         >
           <TouchableOpacity
             onPress={handleToMediation}
@@ -128,7 +124,7 @@ const MediationScreen: React.FC<Props> = ({ navigation }) => {
         </ImageBackground>
         <ImageBackground
           source={require("assets/stress-exe.png")}
-          resizeMode="contain"
+          resizeMode="cover"
         >
           <TouchableOpacity
             onPress={handleToStress}
@@ -146,47 +142,20 @@ const MediationScreen: React.FC<Props> = ({ navigation }) => {
           </TouchableOpacity>
         </ImageBackground>
       </View>
-      {showedMediation && (
+      {responseOldLesson && responseOldLesson?.data?.content?.length! > 0 && (
         <View style={styles.contContainer}>
           <Text style={styles.title}>Tiếp tục</Text>
           <FlatList
             scrollEnabled={false}
-            data={showedMediation}
+            data={responseOldLesson?.data?.content}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => (
-              <View
-                style={{
-                  alignItems: "center",
-                  marginVertical: 8,
-                }}
-              >
-                <TouchableOpacity className="w-full" activeOpacity={0.9}>
-                  <View
-                    style={{
-                      alignItems: "center",
-                    }}
-                  >
-                    <Image
-                      source={item.image}
-                      style={{
-                        width: "100%",
-                        resizeMode: "contain",
-                      }}
-                    />
-                  </View>
-                </TouchableOpacity>
-              </View>
+              <ListLessonItem
+                item={item.lesson as LessonDto}
+                historyLesson={item}
+              />
             )}
           />
-          {/* <View style={styles.listViewContainer}>
-      <ListView
-        data={showedMediation}
-        renderItem={({ item, onPress }) => (
-          <MediationList item={item} onPress={onPress} />
-        )}
-        style={styles.listView}
-      />
-    </View> */}
         </View>
       )}
 
@@ -194,40 +163,22 @@ const MediationScreen: React.FC<Props> = ({ navigation }) => {
         <Text style={styles.title}>Gợi ý cho bạn</Text>
         <FlatList
           scrollEnabled={false}
-          data={listMediation.slice(0, 4)}
+          data={list}
+          extraData={list}
+          ListEmptyComponent={
+            initLoading ? (
+              <ActivityIndicator animating={true} />
+            ) : (
+              <View style={{ flex: 1 }}>
+                <Text>0 results</Text>
+              </View>
+            )
+          }
           numColumns={2}
           style={{ flex: 1 }}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(item) => item.id!.toString()}
           renderItem={({ item }) => (
-            <View
-              style={{
-                alignItems: "center",
-                flex: 1,
-                margin: 3,
-                marginVertical: 10,
-                minHeight: Dimensions.get("window").width / 2,
-              }}
-            >
-              <TouchableOpacity className="w-full" activeOpacity={0.9}>
-                <View
-                  style={{
-                    alignItems: "center",
-                  }}
-                >
-                  <Image
-                    source={item.image}
-                    style={{
-                      width: "100%",
-                      resizeMode: "cover",
-                    }}
-                  />
-                  <Text className="font-bold text-lg text-[#3F54DB]">
-                    {item.name}
-                  </Text>
-                  <Text className="text-[#3F54DB]">{item.desc}</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
+            <ListLessonItem item={item} showDetail={true} />
           )}
         />
       </View>
@@ -248,6 +199,7 @@ const MediationScreen: React.FC<Props> = ({ navigation }) => {
             justifyContent: "center",
             alignItems: "center",
           }}
+          onPress={handleLoadMore}
         >
           <Text
             style={{ color: colors.white, fontSize: 16, fontWeight: "bold" }}
@@ -256,13 +208,7 @@ const MediationScreen: React.FC<Props> = ({ navigation }) => {
           </Text>
         </TouchableOpacity>
       </View>
-      <View
-        style={{
-          flex: 1,
-          marginBottom: 130,
-        }}
-      ></View>
-    </ScrollView>
+    </MainLayout>
   );
 };
 
@@ -305,7 +251,6 @@ const styles = StyleSheet.create({
   },
   contContainer: {
     width: "100%",
-    marginVertical: 5,
   },
   listViewContainer: {
     flex: 1,

@@ -1,28 +1,32 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import RegisterScreen from "../screens/RegisterScreen";
-import LoginScreen from "../screens/LoginScreen";
-import WelcomeScreen from "~/screens/WelcomeScreen";
-import HomeScreen from "~/screens/HomeScreen";
+import HomeTabNavigator from "./HomeNavigator";
+import React from "react";
 import LessonDetailScreen from "~/screens/LessonScreen/DetailScreen";
-import ForgetpasswordScreen from "~/screens/ForgetpasswordScreen";
-import OtpScreen from "~/screens/ForgetpasswordScreen/OtpScreen";
-import ChangepasswordScreen from "~/screens/ForgetpasswordScreen/ChangepasswordScreen";
-import SplashScreen from "~/screens/SplashScreen";
-import BottomTabNavigator from "./BottomTabNavigator";
+import SearchFoodScreen from "~/screens/SearchFoodScreen";
+import { Text } from "react-native";
+import { colors } from "~/utils/colors";
+import VideoScreen from "~/screens/LessonScreen/VideoScreen";
+import { UserLessonResponse } from "~/api/v1";
+import ViewPackageScreen from "~/screens/SettingsScreen/Package/ViewPackageScreen";
+import ViewPackageDetailScreen from "~/screens/SettingsScreen/Package/ViewPackageDetailScreen";
+import PaymentScreen from "~/screens/PaymentScreen";
+import { TransferInfoType } from "~/types/types";
 
-export type AppStackParamList = {
-  LOGIN: undefined;
-  REGISTER: undefined;
-  WELCOME: undefined;
+export type AppParamList = {
   HOME: undefined;
-  LESSON_DETAIL: { lessonId: number };
-  FORGOT_PASSWORD: undefined;
-  OTP: { email: string };
-  CHANGE_PASSWORD: { email: string; otp: string };
-  SPLASH: undefined;
+  LESSON_DETAIL: { lessonId: number; historyLesson?: UserLessonResponse };
+  SEARCH_FOOD: { slot: string };
+  LESSON_VIDEO: { videoUrl: string; lessonId: number; currentTime?: number };
+  VIEW_PACKAGE: undefined;
+  VIEW_PACKAGE_DETAIL: {
+    name: string;
+    money: number;
+    item: { title: string; description: string }[];
+  };
+  PAYMENT: TransferInfoType;
 };
 
-const Stack = createNativeStackNavigator<AppStackParamList>();
+const Stack = createNativeStackNavigator<AppParamList>();
 
 const AppNavigator: React.FC = () => {
   return (
@@ -31,20 +35,52 @@ const AppNavigator: React.FC = () => {
         headerShown: false,
       }}
     >
-      <Stack.Screen name="WELCOME" component={WelcomeScreen} />
-      <Stack.Screen name="LOGIN" component={LoginScreen} />
-      <Stack.Screen name="REGISTER" component={RegisterScreen} />
-      <Stack.Screen name="FORGOT_PASSWORD" component={ForgetpasswordScreen} />
-      <Stack.Screen name="OTP" component={OtpScreen} />
-      <Stack.Screen name="CHANGE_PASSWORD" component={ChangepasswordScreen} />
-      <Stack.Screen name="SPLASH" component={SplashScreen} />
-      <Stack.Screen name="HOME" component={BottomTabNavigator} />
-      {/* <Stack.Screen
-        name="HOME"
-        component={HomeScreen}
-        initialParams={{ page: 0, size: 2 }}
-      /> */}
+      <Stack.Screen name="HOME" component={HomeTabNavigator} />
       <Stack.Screen name="LESSON_DETAIL" component={LessonDetailScreen} />
+      <Stack.Screen
+        name="SEARCH_FOOD"
+        component={SearchFoodScreen}
+        options={({ route }) => ({
+          title: route.params.slot,
+          headerShown: true,
+          headerTitleAlign: "center",
+          headerStyle: {
+            backgroundColor: "#3F54DB",
+          },
+          headerTintColor: "white",
+        })}
+      />
+      <Stack.Screen name="LESSON_VIDEO" component={VideoScreen} />
+      <Stack.Screen
+        name="VIEW_PACKAGE"
+        options={({ route }) => ({
+          title: "",
+          headerShown: true,
+          headerTransparent: true,
+          headerTintColor: colors.primary,
+        })}
+        component={ViewPackageScreen}
+      />
+      <Stack.Screen
+        name="VIEW_PACKAGE_DETAIL"
+        options={({ route }) => ({
+          title: "",
+          headerShown: true,
+          headerTransparent: true,
+          headerTintColor: colors.primary,
+        })}
+        component={ViewPackageDetailScreen}
+      />
+      <Stack.Screen
+        name="PAYMENT"
+        options={({ route }) => ({
+          title: "",
+          headerShown: true,
+          headerTransparent: true,
+          headerTintColor: colors.primary,
+        })}
+        component={PaymentScreen}
+      />
     </Stack.Navigator>
   );
 };

@@ -17,3 +17,13 @@ export const formatDuration = (minutes?: number): string => {
     return `${minutes} phút`;
   }
 };
+export const formatToVietnamDate = (date?: Date) => {
+  if (!date) return `yyyy-mm-dd`;
+  const vietnamTimeOffset = 7 * 60; // GMT+7 in minutes
+  const localDate = new Date(date.getTime() + vietnamTimeOffset * 60000);
+  const year = localDate.getUTCFullYear();
+  const month = String(localDate.getUTCMonth() + 1).padStart(2, "0");
+  const day = String(localDate.getUTCDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+};

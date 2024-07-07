@@ -2,11 +2,11 @@ const baseImageUrl = "http://192.168.1.9:8080/uploads/image/lessons/";
 const baseVideoUrl = "http://192.168.1.9:8080/uploads/video/lessons/";
 
 export const formatImageUrl = (path?: string): string => {
-  console.log(`${baseImageUrl}${path}`);
+  // console.log(`${baseImageUrl}${path}`);
   return `${baseImageUrl}${path}`;
 };
 
 export const formatVideoUrl = (path?: string): string => {
-  console.log(`${baseVideoUrl}${path}`);
+  // console.log(`${baseVideoUrl}${path}`);
   return `${baseVideoUrl}${path}`;
 };

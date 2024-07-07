@@ -1,5 +1,6 @@
 package com.v2p.swp391.common.swagger;
 
+import com.v2p.swp391.application.dto.LessonDto;
 import com.v2p.swp391.application.model.LessonEntity;
 import com.v2p.swp391.common.api.CoreResponse;
 import com.v2p.swp391.common.api.PagedResponse;
@@ -13,7 +14,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-class LessonPagedResponse extends CoreResponse<PagedResponse<LessonEntity>> {
+class LessonPagedResponse extends CoreResponse<PagedResponse<LessonDto>> {
 
 }
 

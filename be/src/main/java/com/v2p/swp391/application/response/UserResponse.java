@@ -4,6 +4,9 @@ import com.v2p.swp391.common.enums.Role;
 import com.v2p.swp391.common.enums.SocialProvider;
 import lombok.*;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -27,4 +30,8 @@ public class UserResponse {
     private SocialProvider socialProvider;
 
     private String providerId;
+
+    private LocalDateTime createdAt;
+
+    private List<String> purchasedPackages;
 }

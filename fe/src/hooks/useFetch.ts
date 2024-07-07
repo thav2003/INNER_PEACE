@@ -5,8 +5,12 @@ import { formatError } from "~/api";
 import { StringResponse } from "~/api/v1";
 import { useAppStore } from "~/stores/app.store";
 
+interface FetchFunctionObject<T> {
+  fetchFunction: () => Promise<AxiosResponse<T>>;
+}
+
 const useFetch = <T>(
-  fetchFunction: () => Promise<AxiosResponse<T>>,
+  { fetchFunction }: FetchFunctionObject<T>,
   ...args: any
 ): [T | null, boolean, string | null] => {
   const reFetch = useAppStore((state) => state.isRefecth);

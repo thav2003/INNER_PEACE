@@ -9,11 +9,10 @@ import {
 import React from "react";
 import { colors } from "../../utils/colors";
 import { Button } from "react-native-paper";
-import { useNavigation } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { AppStackParamList } from "~/navigator/AppNavigator";
+import { InitialStackParamList } from "~/navigator/InitialNavigator";
 
-type Props = NativeStackScreenProps<AppStackParamList, "WELCOME">;
+type Props = NativeStackScreenProps<InitialStackParamList, "WELCOME">;
 const WelcomeScreen: React.FC<Props> = ({ navigation }) => {
   const handleSignIn = () => {
     navigation.navigate("LOGIN");
@@ -22,8 +21,7 @@ const WelcomeScreen: React.FC<Props> = ({ navigation }) => {
     navigation.navigate("REGISTER");
   };
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar />
+    <View style={styles.container}>
       <Image source={require("assets/home-logo.png")} style={styles.homeLogo} />
       <Image
         style={styles.vector}
@@ -62,7 +60,7 @@ const WelcomeScreen: React.FC<Props> = ({ navigation }) => {
           </Button>
         </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
