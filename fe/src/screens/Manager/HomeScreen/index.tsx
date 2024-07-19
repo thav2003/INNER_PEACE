@@ -139,6 +139,7 @@ const HomeScreen: React.FC<Props> = ({ navigation, route }) => {
       bnb: "redtext",
     },
   ];
+  console.log(responseWeekly);
   const barData = [
     {
       value: responseWeekly ? responseWeekly[0] : 0,
@@ -230,7 +231,7 @@ const HomeScreen: React.FC<Props> = ({ navigation, route }) => {
             sideWidth={15}
             // isThreeD
             side="right"
-            isAnimated
+            // isAnimated
             yAxisThickness={0}
             xAxisThickness={0}
             hideYAxisText
