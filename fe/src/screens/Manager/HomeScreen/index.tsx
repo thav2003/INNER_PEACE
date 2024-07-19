@@ -139,59 +139,57 @@ const HomeScreen: React.FC<Props> = ({ navigation, route }) => {
       bnb: "redtext",
     },
   ];
-  const barData = useMemo(() => {
-    return [
-      {
-        value: responseWeekly ? responseWeekly[0] : 0,
-        label: "Thứ 2",
-        frontColor: "#4ABFF4",
-        sideColor: "#23A7F3",
-        topColor: "#92e6f6",
-      },
-      {
-        value: responseWeekly ? responseWeekly[1] : 0,
-        label: "Thứ 3",
-        frontColor: "#79C3DB",
-        sideColor: "#68BCD7",
-        topColor: "#9FD4E5",
-      },
-      {
-        value: responseWeekly ? responseWeekly[2] : 0,
-        label: "Thứ 4",
-        frontColor: "#28B2B3",
-        sideColor: "#0FAAAB",
-        topColor: "#66C9C9",
-      },
-      {
-        value: responseWeekly ? responseWeekly[3] : 0,
-        label: "Thứ 5",
-        frontColor: "#4ADDBA",
-        sideColor: "#36D9B2",
-        topColor: "#7DE7CE",
-      },
-      {
-        value: responseWeekly ? responseWeekly[4] : 0,
-        label: "Thứ 6",
-        frontColor: "#91E3E3",
-        sideColor: "#85E0E0",
-        topColor: "#B0EAEB",
-      },
-      {
-        value: responseWeekly ? responseWeekly[5] : 0,
-        label: "Thứ 7",
-        frontColor: "#4ADDBA",
-        sideColor: "#36D9B2",
-        topColor: "#7DE7CE",
-      },
-      {
-        value: responseWeekly ? responseWeekly[6] : 0,
-        label: "Chủ nhật",
-        frontColor: "#79C3DB",
-        sideColor: "#68BCD7",
-        topColor: "#9FD4E5",
-      },
-    ];
-  }, [responseWeekly]);
+  const barData = [
+    {
+      value: responseWeekly ? responseWeekly[0] : 0,
+      label: "Thứ 2",
+      frontColor: "#4ABFF4",
+      sideColor: "#23A7F3",
+      topColor: "#92e6f6",
+    },
+    {
+      value: responseWeekly ? responseWeekly[1] : 0,
+      label: "Thứ 3",
+      frontColor: "#79C3DB",
+      sideColor: "#68BCD7",
+      topColor: "#9FD4E5",
+    },
+    {
+      value: responseWeekly ? responseWeekly[2] : 0,
+      label: "Thứ 4",
+      frontColor: "#28B2B3",
+      sideColor: "#0FAAAB",
+      topColor: "#66C9C9",
+    },
+    {
+      value: responseWeekly ? responseWeekly[3] : 0,
+      label: "Thứ 5",
+      frontColor: "#4ADDBA",
+      sideColor: "#36D9B2",
+      topColor: "#7DE7CE",
+    },
+    {
+      value: responseWeekly ? responseWeekly[4] : 0,
+      label: "Thứ 6",
+      frontColor: "#91E3E3",
+      sideColor: "#85E0E0",
+      topColor: "#B0EAEB",
+    },
+    {
+      value: responseWeekly ? responseWeekly[5] : 0,
+      label: "Thứ 7",
+      frontColor: "#4ADDBA",
+      sideColor: "#36D9B2",
+      topColor: "#7DE7CE",
+    },
+    {
+      value: responseWeekly ? responseWeekly[6] : 0,
+      label: "Chủ nhật",
+      frontColor: "#79C3DB",
+      sideColor: "#68BCD7",
+      topColor: "#9FD4E5",
+    },
+  ];
 
   return (
     <MainLayout style={styles.container}>
