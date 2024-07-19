@@ -18,7 +18,7 @@ import { formatDuration } from "~/utils/time";
 import { Button } from "react-native-paper";
 import { AVPlaybackStatus, ResizeMode, Video } from "expo-av";
 import { Icon } from "@rneui/themed";
-import { HomeParamList } from "~/navigator/HomeNavigator";
+import { HomeParamList } from "~/navigator/AppTabNavigator";
 import { AppParamList } from "~/navigator/AppNavigator";
 type Props = NativeStackScreenProps<AppParamList, "LESSON_DETAIL">;
 

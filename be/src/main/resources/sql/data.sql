@@ -18,7 +18,54 @@ SET @user4_id = LAST_INSERT_ID();
 INSERT INTO users (full_name, phone_number, email, password, image_url, role, is_active, social_provider, provider_id, created_at)
 VALUES ('Database Customer', '999999999', 'database@example.com', '$2a$10$ZK3B2r3TvLenI0qLLoGnJeCwsXkC.OwTEcehgd3DytRgBB526c1xq', 'default.jpg', 'CUSTOMER', true, 'DATABASE', null, NOW());
 SET @user5_id = LAST_INSERT_ID();
+-- User 6: Professional user with DATABASE login
+INSERT INTO users (full_name, phone_number, email, password, image_url, role, is_active, social_provider, provider_id, created_at)
+VALUES ('Professional User', '888888888', 'professional@example.com', '$2a$10$ZK3B2r3TvLenI0qLLoGnJeCwsXkC.OwTEcehgd3DytRgBB526c1xq', 'default.jpg', 'PROFESSIONAL', true, 'DATABASE', null, NOW());
+SET @user_professional_id = LAST_INSERT_ID();
 
+INSERT INTO users (full_name, phone_number, email, password, image_url, role, is_active, social_provider, provider_id, created_at)
+VALUES ('Database Customer 1', '999999999', 'database@example.com', '$2a$10$ZK3B2r3TvLenI0qLLoGnJeCwsXkC.OwTEcehgd3DytRgBB526c1xq', 'default.jpg', 'CUSTOMER', true, 'DATABASE', null, NOW());
+INSERT INTO users (full_name, phone_number, email, password, image_url, role, is_active, social_provider, provider_id, created_at)
+VALUES ('Database Customer 2', '999999999', 'database@example.com', '$2a$10$ZK3B2r3TvLenI0qLLoGnJeCwsXkC.OwTEcehgd3DytRgBB526c1xq', 'default.jpg', 'CUSTOMER', true, 'DATABASE', null, NOW());
+INSERT INTO users (full_name, phone_number, email, password, image_url, role, is_active, social_provider, provider_id, created_at)
+VALUES ('Database Customer 3', '999999999', 'database@example.com', '$2a$10$ZK3B2r3TvLenI0qLLoGnJeCwsXkC.OwTEcehgd3DytRgBB526c1xq', 'default.jpg', 'CUSTOMER', true, 'DATABASE', null, NOW());
+INSERT INTO users (full_name, phone_number, email, password, image_url, role, is_active, social_provider, provider_id, created_at)
+VALUES ('Database Customer 4', '999999999', 'database@example.com', '$2a$10$ZK3B2r3TvLenI0qLLoGnJeCwsXkC.OwTEcehgd3DytRgBB526c1xq', 'default.jpg', 'CUSTOMER', true, 'DATABASE', null, NOW());
+INSERT INTO users (full_name, phone_number, email, password, image_url, role, is_active, social_provider, provider_id, created_at)
+VALUES ('Database Customer 5', '999999999', 'database@example.com', '$2a$10$ZK3B2r3TvLenI0qLLoGnJeCwsXkC.OwTEcehgd3DytRgBB526c1xq', 'default.jpg', 'CUSTOMER', true, 'DATABASE', null, NOW());
+INSERT INTO users (full_name, phone_number, email, password, image_url, role, is_active, social_provider, provider_id, created_at)
+VALUES ('Database Customer 6', '999999999', 'database@example.com', '$2a$10$ZK3B2r3TvLenI0qLLoGnJeCwsXkC.OwTEcehgd3DytRgBB526c1xq', 'default.jpg', 'CUSTOMER', true, 'DATABASE', null, NOW());
+INSERT INTO users (full_name, phone_number, email, password, image_url, role, is_active, social_provider, provider_id, created_at)
+VALUES ('Database Customer 7', '999999999', 'database@example.com', '$2a$10$ZK3B2r3TvLenI0qLLoGnJeCwsXkC.OwTEcehgd3DytRgBB526c1xq', 'default.jpg', 'CUSTOMER', true, 'DATABASE', null, NOW());
+
+
+-- Insert a new room for the conversation
+INSERT INTO rooms (created_at, updated_at) VALUES (NOW(), NOW());
+SET @room1_id = LAST_INSERT_ID();
+-- Associate the Professional user with the room
+INSERT INTO room_users (room_id, user_id) VALUES (@room1_id, @user_professional_id);
+-- Associate the Customer user with the room
+INSERT INTO room_users (room_id, user_id) VALUES (@room1_id, @user5_id);
+-- Insert a message from the Professional user to the Customer user
+INSERT INTO messages (sender_id, receiver_id, room_id, content, created_at, updated_at)
+VALUES (@user_professional_id, @user5_id, @room1_id, 'Hello Customer 5, how can I assist you today?', NOW(), NOW());
+-- Insert a response from the Customer user to the Professional user
+INSERT INTO messages (sender_id, receiver_id, room_id, content, created_at, updated_at)
+VALUES (@user5_id, @user_professional_id, @room1_id, 'Hi Professional, I need help with my diet plan.', NOW(), NOW());
+
+-- Insert a new room for the conversation
+INSERT INTO rooms (created_at, updated_at) VALUES (NOW(),NOW());
+SET @room2_id = LAST_INSERT_ID();
+-- Associate the Professional user with the room
+INSERT INTO room_users (room_id, user_id) VALUES (@room2_id, @user_professional_id);
+-- Associate the Customer user with the room
+INSERT INTO room_users (room_id, user_id) VALUES (@room2_id, @user4_id);
+-- Insert a message from the Professional user to the Customer user
+INSERT INTO messages (sender_id, receiver_id, room_id, content, created_at, updated_at)
+VALUES (@user_professional_id, @user4_id, @room2_id, 'Hello Customer 4, how can I assist you today?', NOW(), NOW());
+-- Insert a response from the Customer user to the Professional user
+INSERT INTO messages (sender_id, receiver_id, room_id, content, created_at, updated_at)
+VALUES (@user4_id, @user_professional_id, @room2_id, 'Hi Professional, I need help with my diet plan.', NOW(), NOW());
 
 INSERT INTO user_packages(user_id, package_name)
 VALUES
@@ -32,75 +79,51 @@ VALUES
 
 -- Lesson 1
 INSERT INTO lessons (name, duration, description, video_url, img_url, created_at, updated_at)
-VALUES ('Lesson 1', 60, 'Introduction to Programming', '1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4', 'thumbnail_1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4.png', NOW(), NOW());
+VALUES ('Hướng dẫn thiền cân bằng tâm trí ', 14, 'Nhìn nhận lại cuộc sống, bỏ đi những gì không phục vụ cho hạnh phúc của mình nữa, đón nhận những điều mới để tâm trí bình an hơn. 😊', '1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4', 'l1.png', NOW(), NOW());
 
 -- Lesson 2
 INSERT INTO lessons (name, duration, description, video_url, img_url, created_at, updated_at)
-VALUES ('Lesson 2', 45, 'Database Design Basics', '1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4', 'thumbnail_1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4.png', NOW(), NOW());
+VALUES ('Hướng dẫn ngồi thiền đơn giản, khoa học & hiệu quả', 40, 'Một người thầy vĩ đại đã nói ngồi thiền tầm 40 phút sẽ đem lại vô vàn lợi lạc cho cuộc sống của bạn. Vì chúng ta làm mọi thứ với tâm trí này - học tập, làm việc, cư xử trong các mối quan hệ…. Nếu tâm trí nhẹ nhàng, bình an, suy nghĩ sáng suốt, rõ rang; thì nhờ đó cũng làm cho cuộc sống xung quanh mình tươi sáng & tích cực hơn.   Thiền là ở ngay trong hiện tại, rõ ràng, tỉnh thức. Không chạy theo hình ảnh hay âm thanh nào; không phải đi đến cảnh giới nào cả. Quan sát sự vật như nó là, không thêm không bớt, với phương pháp thiền cực kỳ đơn giản mà ai cũng làm được. Tập luyện từ từ bạn sẽ thấy tâm trí mình sáng suốt, tập trung tốt hơn và bình an hơn dù có chuyện gì xảy ra trong cuộc sống.  Bài thiền này đúc kết từ trải nghiệm của mình sau nhiều khóa thiền theo lời dạy của Đức Phật. Dành cho mọi người, mọi tôn giáo, phi tôn giáo.', '1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4', 'l2.png', NOW(), NOW());
 
 -- Lesson 3
 INSERT INTO lessons (name, duration, description, video_url, img_url, created_at, updated_at)
-VALUES ('Lesson 3', 30, 'Web Development Fundamentals', '1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4', 'thumbnail_1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4.png', NOW(), NOW());
+VALUES ('Thiền thư giãn cuối ngày yên lành', 14, 'Cùng ngồi thiền một vài phút cuối ngày để tâm trí thư giãn, ngủ ngon và sâu các bạn nhé.', '1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4', 'l3.png', NOW(), NOW());
 
 -- Lesson 4
 INSERT INTO lessons (name, duration, description, video_url, img_url, created_at, updated_at)
-VALUES ('Advanced Java Programming', 75, 'Advanced concepts in Java programming language', '1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4', 'thumbnail_1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4.png', NOW(), NOW());
+VALUES ('Thiền bắt đầu ngày mới an lành', 12, 'Chào ngày mới an lành!\n\nChúng ta làm tất cả mọi thứ từ tâm trí này, nếu tâm trí bình tĩnh, sáng suốt thì mình cũng nhìn mọi việc rõ ràng hơn, làm việc hiệu quả hơn, không tốn nhiều năng lượng cho việc không cần thiết.', '1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4', 'l4.png', NOW(), NOW());
 
 -- Lesson 5
 INSERT INTO lessons (name, duration, description, video_url, img_url, created_at, updated_at)
-VALUES ('Introduction to SQL', 60, 'Fundamentals of SQL and relational databases', '1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4', 'thumbnail_1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4.png', NOW(), NOW());
+VALUES ('Phần 1 - Phương pháp ngồi thiền và thiền đếm hơi thở', 16, 'Thiền thở là bài tập cơ bản dành cho người mới bắt đầu, thường đi kèm với các bài tập thiền khác. Khi tập, bạn không nghĩ ngợi gì mà chỉ tập trung quan sát hơi thở. Bạn chú tâm cho việc hít vào và thở ra, chú tâm dõi theo từng luồng thở và biết được nơi nó đang đến.\n\nLợi ích: Giúp bạn tập trung tư tưởng mọi nơi, mọi lúc. Hãy tập trung vào hơi thở bất cứ lúc nào bạn cảm thấy đờ đẫn, mệt mỏi và căng thẳng để lấy lại tinh thần.', '1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4', 'l5.png', NOW(), NOW());
 
 -- Lesson 6
 INSERT INTO lessons (name, duration, description, video_url, img_url, created_at, updated_at)
-VALUES ('Web Development with Spring Boot', 90, 'Building web applications using Spring Boot framework', '1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4', 'thumbnail_1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4.png', NOW(), NOW());
+VALUES ('Phần 2 - Hướng dẫn thiền theo dõi hơi thở', 17, 'Thiền thở là bài tập cơ bản dành cho người mới bắt đầu, thường đi kèm với các bài tập thiền khác. Khi tập, bạn không nghĩ ngợi gì mà chỉ tập trung quan sát hơi thở. Bạn chú tâm cho việc hít vào và thở ra, chú tâm dõi theo từng luồng thở và biết được nơi nó đang đến.\n\nLợi ích: Giúp bạn tập trung tư tưởng mọi nơi, mọi lúc. Hãy tập trung vào hơi thở bất cứ lúc nào bạn cảm thấy đờ đẫn, mệt mỏi và căng thẳng để lấy lại tinh thần.', '1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4', 'l6.png', NOW(), NOW());
 
 -- Lesson 7
 INSERT INTO lessons (name, duration, description, video_url, img_url, created_at, updated_at)
-VALUES ('Python for Data Analysis', 120, 'Using Python for data manipulation and analysis', '1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4', 'thumbnail_1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4.png', NOW(), NOW());
+VALUES ('CÁC BÀI TẬP GIÃN CƠ BUỔI SÁNG GIÚP GIẢM STRESS', 10, 'Ngoài việc tập luyện và ăn kiêng thì chúng ta nên kết hợp thêm stretching để đạt được một sức khoẻ tốt và tăng độ dẻo dai linh hoạt cho cơ bắp, hôm nay Sky sẽ cùng hướng dẫn các bạn 10 phút MORNING STRETCH giúp chúng ta giãn cơ và giảm stress nữa nha. Những bài stretch này hoàn toàn rất đơn giản, bạn có thể làm vào buổi sáng hoặc sau khi tập xong đều được.', '1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4', 'l7.png', NOW(), NOW());
 
 -- Lesson 8
 INSERT INTO lessons (name, duration, description, video_url, img_url, created_at, updated_at)
-VALUES ('Introduction to Machine Learning', 90, 'Basic concepts and algorithms in machine learning', '1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4', 'thumbnail_1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4.png', NOW(), NOW());
+VALUES ('Yoga Giảm Stress và Căng Thẳng cho Người Mới', 25, 'Trong video này, Nguyên sẽ hướng dẫn chuỗi tư thế Yoga giúp giảm stress và căng thẳng. Bạn có thể xem video này bất kể khi nào bạn cảm thấy cuộc sống có quá nhiều thứ đang xảy ra, cảm xúc lẫn lộn, hay cảm thấy cần một chút thời gian cho bản thân, thư giãn cơ thể và tâm trí. Nó cũng sẽ giúp giảm các cơn đau lưng, đau cổ vai gáy, giúp bạn ngủ ngon hơn và bình an hơn.', '1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4', 'l8.png', NOW(), NOW());
 
 -- Lesson 9
 INSERT INTO lessons (name, duration, description, video_url, img_url, created_at, updated_at)
-VALUES ('Data Structures and Algorithms', 120, 'Fundamental data structures and algorithms', '1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4', 'thumbnail_1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4.png', NOW(), NOW());
+VALUES ('5 Bài tập yoga giúp giảm căng thẳng, cải thiện tâm trạng', 6, 'Nếu bạn đang căng thẳng hoặc lo lắng có thể tìm đến với yoga. Hãy thử 5 bài tập yoga dưới đây có thể giảm căng thẳng và cải thiện tâm trạng của bạn', '1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4', 'l9.png', NOW(), NOW());
 
 -- Lesson 10
 INSERT INTO lessons (name, duration, description, video_url, img_url, created_at, updated_at)
-VALUES ('Android App Development', 150, 'Developing mobile applications for Android platform', '1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4', 'thumbnail_1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4.png', NOW(), NOW());
+VALUES ('Thiền và thư giãn cổ vai gáy giảm stress', 17, 'Đây là video hướng dẫn ngồi Thiền và thư giãn Cổ vai gáy cùng HLV Yoga By Sophie.\nPhù hợp tập vào bất kỳ khi nào hoặc buổi tối trước khi đi ngủ cho giấc ngủ ngon, dễ chịu cùng nhạc nền thư giãn giúp bạn giảm căng thẳng.\n\nHãy tập thường xuyên để có kết quả tốt!', '1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4', 'l10.png', NOW(), NOW());
 
 -- Lesson 11
 INSERT INTO lessons (name, duration, description, video_url, img_url, created_at, updated_at)
-VALUES ('Introduction to Cybersecurity', 60, 'Basic principles of cybersecurity', '1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4', 'thumbnail_1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4.png', NOW(), NOW());
+VALUES ('Bài tập thở: Tập mỗi ngày khỏe một đời - giảm cân, khoẻ phổi, thải độc, giải toả căng thẳng ✨', 10, 'Tập thở thường không được coi trọng vì đây được coi là hoạt động nhẹ nhàng và nhàm chán. Nhưng hít thở đúng cách bổ trợ rất tốt cho việc tập luyện và đạt kết quả tốt về hình thể. Hơn thế nữa, tập hít thở sâu có rất nhiều lợi ích như giải toả căng thẳng, gia tăng sức khoẻ của phổi, rèn luyện sự tập trung, đào thải độc tố.\nCùng rủ người thân và bạn bè tập hít thở để gia tăng sự gắn kết vì bài này rất dễ thực hiện ♥️', '1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4', 'l11.png', NOW(), NOW());
 
 -- Lesson 12
 INSERT INTO lessons (name, duration, description, video_url, img_url, created_at, updated_at)
-VALUES ('Cloud Computing Basics', 90, 'Introduction to cloud computing services and providers', '1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4', 'thumbnail_1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4.png', NOW(), NOW());
-
--- Lesson 13
-INSERT INTO lessons (name, duration, description, video_url, img_url, created_at, updated_at)
-VALUES ('React.js Essentials', 75, 'Building user interfaces with React.js library', '1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4', 'thumbnail_1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4.png', NOW(), NOW());
-
--- Lesson 14
-INSERT INTO lessons (name, duration, description, video_url, img_url, created_at, updated_at)
-VALUES ('Artificial Intelligence Applications', 120, 'Real-world applications of artificial intelligence', '1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4', 'thumbnail_1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4.png', NOW(), NOW());
-
--- Lesson 15
-INSERT INTO lessons (name, duration, description, video_url, img_url, created_at, updated_at)
-VALUES ('Node.js Fundamentals', 90, 'Building scalable network applications with Node.js', '1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4', 'thumbnail_1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4.png', NOW(), NOW());
-
--- Lesson 16
-INSERT INTO lessons (name, duration, description, video_url, img_url, created_at, updated_at)
-VALUES ('Digital Marketing Strategies', 60, 'Essential strategies and tools in digital marketing', '1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4', 'thumbnail_1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4.png', NOW(), NOW());
-
--- Lesson 17
-INSERT INTO lessons (name, duration, description, video_url, img_url, created_at, updated_at)
-VALUES ('UI/UX Design Principles', 75, 'Fundamentals of user interface and user experience design', '1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4', 'thumbnail_1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4.png', NOW(), NOW());
-
--- Lesson 18
-INSERT INTO lessons (name, duration, description, video_url, img_url, created_at, updated_at)
-VALUES ('Blockchain Technology', 120, 'Understanding blockchain technology and cryptocurrencies', '1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4', 'thumbnail_1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4.png', NOW(), NOW());
+VALUES ('Yoga giảm căng thẳng, stress giúp thư giãn ngủ ngon', 22, 'Hãy để tâm trí của bạn được thư giãn và tĩnh lặng hòa cùng dòng chảy của hơi thở, bạn sẽ cảm nhận được sự bình an và niềm hạnh phúc trào dâng trong cơ thể. Dành cho mình những phút giây thả lỏng và nghỉ ngơi thật sự sau ngày dài mệt mỏi, để quân bình lại năng lượng và phát triển tình yêu thương.', '1717857459038_AIO - TnP - Google Chrome 2024-04-13 07-39-22.mp4', 'l12.png', NOW(), NOW());
 
 INSERT INTO lesson_categories (id, name, parent_id, created_at, updated_at)
 VALUES (1, 'Packages', NULL, NOW(), NOW());
@@ -157,13 +180,7 @@ VALUES
 (9, 3),
 (10, 4),
 (11, 3),
-(12, 4),
-(13, 4),
-(14, 3),
-(15, 2),
-(16, 2),
-(17, 2),
-(18, 2);
+(12, 4);
 
 -- Daily Meal Plan 1
 INSERT INTO daily_meal_plans (date, slot, user_id, created_at, updated_at)
@@ -515,3 +532,31 @@ VALUES
 (@dailyMealPlan6_id, 'Vitamin E', 15, 'mg', 100),
 (@dailyMealPlan6_id, 'Vitamin K', 120, 'µg', 100),
 (@dailyMealPlan6_id, 'Zinc', 11, 'mg', 73.33);
+
+
+INSERT INTO payments
+(`amount`, `order_code`, `created_at`, `transaction_date`, `updated_at`, `user_id`, `account_name`, `account_number`,
+`bin`, `checkout_url`, `currency`, `description`, `packages`, `payment_link_id`,
+`qr_code`, `reference`, `status`)
+VALUES
+('79000', '413395', '2024-07-12 07:13:33.862302', '2024-07-15 07:14:00.000000', '2024-07-08 07:14:01.259566', '7', 'TRUONG HOANG ANH VU', 'VQRQ0002apqjo',
+'970422', 'https://pay.payos.vn/web/3f9c7dbd656d44bfad29c83867b34cd9', 'VND', 'Mua goi Essential', 'Essential', '3f9c7dbd656d44bfad29c83867b34cd9',
+'00020101021238570010A000000727012700069704220113VQRQ0002apqjo0208QRIBFTTA5303704540420005802VN62180814Mua goi Essential63044A61', 'FT24194371469923', 'PAID'),
+('79000', '350228', '2024-07-12 07:13:33.862302', '2024-07-15 07:14:00.000000', '2024-07-08 07:14:01.259566', '8', 'TRUONG HOANG ANH VU', 'VQRQ0002apqjo',
+'970422', 'https://pay.payos.vn/web/3f9c7dbd656d44bfad29c83867b34cd9', 'VND', 'Mua goi Essential', 'Essential', '3f9c7dbd656d44bfad29c83867b34cd9',
+'00020101021238570010A000000727012700069704220113VQRQ0002apqjo0208QRIBFTTA5303704540420005802VN62180814Mua goi Essential63044A61', 'FT24194371469923', 'PAID'),
+('79000', '925453', '2024-07-12 07:13:33.862302', '2024-07-16 07:14:00.000000', '2024-07-09 07:14:01.259566', '9', 'TRUONG HOANG ANH VU', 'VQRQ0002apqjo',
+'970422', 'https://pay.payos.vn/web/3f9c7dbd656d44bfad29c83867b34cd9', 'VND', 'Mua goi Essential', 'Essential', '3f9c7dbd656d44bfad29c83867b34cd9',
+'00020101021238570010A000000727012700069704220113VQRQ0002apqjo0208QRIBFTTA5303704540420005802VN62180814Mua goi Essential63044A61', 'FT24194371469923', 'PAID'),
+('79000', '384939', '2024-07-12 07:13:33.862302', '2024-07-16 07:14:00.000000', '2024-07-09 07:14:01.259566', '10', 'TRUONG HOANG ANH VU', 'VQRQ0002apqjo',
+'970422', 'https://pay.payos.vn/web/3f9c7dbd656d44bfad29c83867b34cd9', 'VND', 'Mua goi Essential', 'Essential', '3f9c7dbd656d44bfad29c83867b34cd9',
+'00020101021238570010A000000727012700069704220113VQRQ0002apqjo0208QRIBFTTA5303704540420005802VN62180814Mua goi Essential63044A61', 'FT24194371469923', 'CANCELLED'),
+('79000', '379427', '2024-07-12 07:13:33.862302', '2024-07-16 07:14:00.000000', '2024-07-10 07:14:01.259566', '11', 'TRUONG HOANG ANH VU', 'VQRQ0002apqjo',
+'970422', 'https://pay.payos.vn/web/3f9c7dbd656d44bfad29c83867b34cd9', 'VND', 'Mua goi Essential', 'Essential', '3f9c7dbd656d44bfad29c83867b34cd9',
+'00020101021238570010A000000727012700069704220113VQRQ0002apqjo0208QRIBFTTA5303704540420005802VN62180814Mua goi Essential63044A61', 'FT24194371469923', 'PAID'),
+('79000', '804617', '2024-07-12 07:13:33.862302', '2024-07-17 07:14:00.000000', '2024-07-10 07:14:01.259566', '12', 'TRUONG HOANG ANH VU', 'VQRQ0002apqjo',
+'970422', 'https://pay.payos.vn/web/3f9c7dbd656d44bfad29c83867b34cd9', 'VND', 'Mua goi Essential', 'Essential', '3f9c7dbd656d44bfad29c83867b34cd9',
+'00020101021238570010A000000727012700069704220113VQRQ0002apqjo0208QRIBFTTA5303704540420005802VN62180814Mua goi Essential63044A61', 'FT24194371469923', 'PAID'),
+('79000', '937361', '2024-07-12 07:13:33.862302', '2024-07-18 07:14:00.000000', '2024-07-08 07:14:01.259566', '13', 'TRUONG HOANG ANH VU', 'VQRQ0002apqjo',
+'970422', 'https://pay.payos.vn/web/3f9c7dbd656d44bfad29c83867b34cd9', 'VND', 'Mua goi Essential', 'Essential', '3f9c7dbd656d44bfad29c83867b34cd9',
+'00020101021238570010A000000727012700069704220113VQRQ0002apqjo0208QRIBFTTA5303704540420005802VN62180814Mua goi Essential63044A61', 'FT24194371469923', 'CANCELLED');

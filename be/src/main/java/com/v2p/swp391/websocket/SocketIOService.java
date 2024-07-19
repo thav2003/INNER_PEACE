@@ -77,7 +77,7 @@ public class SocketIOService {
         server.getRoomOperations(data.get("orderCode").asText()).sendEvent("paymentUpdated", data);
         System.out.println("Payment updated for order: " + data.get("orderCode"));
     }
-    @OnEvent("updateVideoTime")
+
     public void onUpdateVideoTime(SocketIOClient client, JsonNode data) {
         Long lessonId = data.get("lessonId").asLong();
         Long userId = data.get("userId").asLong();

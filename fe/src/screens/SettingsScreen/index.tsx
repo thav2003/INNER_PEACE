@@ -14,12 +14,13 @@ import { CompositeScreenProps, useNavigation } from "@react-navigation/native";
 import MainLayout from "~/layouts/MainLayout";
 import { AppParamList } from "~/navigator/AppNavigator";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { HomeParamList } from "~/navigator/HomeNavigator";
+import { HomeParamList } from "~/navigator/AppTabNavigator";
 import { useAppStore } from "~/stores/app.store";
 import { useAuthStore } from "~/stores/auth.store";
 import { formatToVietnamDate } from "~/utils/time";
 import useFetch from "~/hooks/useFetch";
 import api from "~/api";
+import { InitialStackParamList } from "~/navigator/InitialNavigator";
 const priorityMap: any = {
   Basic: 1,
   Essential: 2,
@@ -41,9 +42,12 @@ function getHighestPackage(purchasedPackages: string[]) {
 }
 type Props = CompositeScreenProps<
   NativeStackScreenProps<HomeParamList, "SETTING">,
-  NativeStackScreenProps<AppParamList, "HOME">
+  NativeStackScreenProps<InitialStackParamList, "APP", "LOGIN">
 >;
+// type Props = NativeStackScreenProps<HomeParamList, "SETTING">;
+
 const SettingsScreen: React.FC<Props> = ({ navigation, route }) => {
+  const logout = useAuthStore((state) => state.logoutUser);
   const accessToken = useAuthStore((state) => state.accessToken);
   const userId = useAuthStore((state) => state.auth?.userId);
   const profile = useAuthStore((state) => state.profile);
@@ -169,12 +173,25 @@ const SettingsScreen: React.FC<Props> = ({ navigation, route }) => {
         </View>
         <TouchableOpacity
           style={styles.upgradeBtn}
-          onPress={() => navigation.navigate("VIEW_PACKAGE")}
+          onPress={() => navigation.navigate("APP", { screen: "VIEW_PACKAGE" })}
         >
           <Text
             style={{ fontSize: 20, fontWeight: "bold", color: colors.white }}
           >
             Nâng cấp ngay
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.upgradeBtn}
+          onPress={() => {
+            logout();
+            navigation.navigate("LOGIN");
+          }}
+        >
+          <Text
+            style={{ fontSize: 20, fontWeight: "bold", color: colors.white }}
+          >
+            Đăng xuất
           </Text>
         </TouchableOpacity>
       </View>

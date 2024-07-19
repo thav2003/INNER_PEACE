@@ -9,12 +9,15 @@ import MainLayout from "~/layouts/MainLayout";
 import ScheduleScreen from "~/screens/ScheduleScreen";
 import SearchFoodScreen from "~/screens/SearchFoodScreen";
 import SettingsScreen from "~/screens/SettingsScreen";
+import ChatScreen from "~/screens/ChatScreen";
+import ListChatScreen from "~/screens/ChatScreen/ListChatScreen";
 
 export type HomeParamList = {
   HOME_TAB?: undefined;
   MEDIATION_TAB: undefined;
   SCHEDULE: undefined;
   SETTING: undefined;
+  CHAT: undefined;
 };
 const Tab = createBottomTabNavigator<HomeParamList>();
 
@@ -107,6 +110,32 @@ const HomeTabNavigator = () => {
             >
               <Image
                 source={focused ? userIcons[2].focused : userIcons[2].default}
+                resizeMode="contain"
+                style={{ width: 22, height: 22 }}
+              />
+            </View>
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="CHAT"
+        component={ListChatScreen}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <View
+              style={[
+                styles.iconContainer,
+                {
+                  backgroundColor: focused ? "#66DBF5" : "",
+                  width: 50,
+                  marginTop: 10,
+                  marginBottom: 10,
+                  borderRadius: 50,
+                },
+              ]}
+            >
+              <Image
+                source={focused ? userIcons[3].focused : userIcons[3].default}
                 resizeMode="contain"
                 style={{ width: 22, height: 22 }}
               />

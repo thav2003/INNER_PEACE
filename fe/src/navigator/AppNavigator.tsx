@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import HomeTabNavigator from "./HomeNavigator";
+import AppTabNavigator from "./AppTabNavigator";
 import React from "react";
 import LessonDetailScreen from "~/screens/LessonScreen/DetailScreen";
 import SearchFoodScreen from "~/screens/SearchFoodScreen";
@@ -11,6 +11,7 @@ import ViewPackageScreen from "~/screens/SettingsScreen/Package/ViewPackageScree
 import ViewPackageDetailScreen from "~/screens/SettingsScreen/Package/ViewPackageDetailScreen";
 import PaymentScreen from "~/screens/PaymentScreen";
 import { TransferInfoType } from "~/types/types";
+import ChatScreen from "~/screens/ChatScreen";
 
 export type AppParamList = {
   HOME: undefined;
@@ -24,6 +25,7 @@ export type AppParamList = {
     item: { title: string; description: string }[];
   };
   PAYMENT: TransferInfoType;
+  CHAT_DETAIL: undefined;
 };
 
 const Stack = createNativeStackNavigator<AppParamList>();
@@ -35,7 +37,7 @@ const AppNavigator: React.FC = () => {
         headerShown: false,
       }}
     >
-      <Stack.Screen name="HOME" component={HomeTabNavigator} />
+      <Stack.Screen name="HOME" component={AppTabNavigator} />
       <Stack.Screen name="LESSON_DETAIL" component={LessonDetailScreen} />
       <Stack.Screen
         name="SEARCH_FOOD"
@@ -81,6 +83,8 @@ const AppNavigator: React.FC = () => {
         })}
         component={PaymentScreen}
       />
+
+      <Stack.Screen name="CHAT_DETAIL" component={ChatScreen} />
     </Stack.Navigator>
   );
 };

@@ -56,4 +56,7 @@ public class UserEntity extends BaseEntity{
     @CollectionTable(name = "user_packages", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "package_name")
     private List<String> purchasedPackages;
+
+    @ManyToMany(mappedBy = "users")
+    private List<RoomEntity> rooms;
 }

@@ -11,11 +11,10 @@ console.error = (...args: any[]) => {
     return;
   }
 };
-import { Button, SafeAreaView, StatusBar, View } from "react-native";
+import { SafeAreaView, StatusBar } from "react-native";
 import "./global.css";
 import { NavigationContainer } from "@react-navigation/native";
 import InitialNavigator from "~/navigator/InitialNavigator";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function App() {
   const linking = {
@@ -27,6 +26,9 @@ export default function App() {
       },
     },
   };
+  console.log(process.env.EXPO_PUBLIC_API_URL);
+  console.log(process.env.EXPO_PUBLIC_SOCKER_URL);
+  console.log(process.env.EXPO_PUBLIC_VIETQR_URL);
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <StatusBar />

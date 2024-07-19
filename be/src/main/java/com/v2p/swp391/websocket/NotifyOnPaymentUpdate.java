@@ -1,11 +1,11 @@
-package com.v2p.swp391.common.socket;
+package com.v2p.swp391.websocket;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface NotifyOnPaymentUpdate {
+@Target(ElementType.METHOD)
+public @interface  NotifyOnPaymentUpdate {
 }

@@ -30,7 +30,7 @@ type Props = NativeStackScreenProps<InitialStackParamList, "LOGIN">;
 const LoginScreen: React.FC<Props> = ({ route, navigation }: Props) => {
   const [loading, setLoading] = useState(false);
   const loginUser = useAuthStore((state) => state.loginUser);
-  const [email, setEmail] = useState("admin@example.com");
+  const [email, setEmail] = useState("professional@example.com");
   const [password, setPassword] = useState("123456");
   const [validationMessages, setValidationMessages] = useState({
     email: "",

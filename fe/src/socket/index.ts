@@ -1,4 +1,4 @@
 import { io } from "socket.io-client";
-const socket = io("http://192.168.1.9:9092");
+const socket = io(process.env.EXPO_PUBLIC_SOCKER_URL!, { autoConnect: false });
 
 export default socket;

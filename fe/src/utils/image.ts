@@ -1,5 +1,7 @@
-const baseImageUrl = "http://192.168.1.9:8080/uploads/image/lessons/";
-const baseVideoUrl = "http://192.168.1.9:8080/uploads/video/lessons/";
+const baseImageUrl = `${process.env
+  .EXPO_PUBLIC_API_URL!}/uploads/image/lessons/`;
+const baseVideoUrl = `${process.env
+  .EXPO_PUBLIC_API_URL!}/uploads/video/lessons/`;
 
 export const formatImageUrl = (path?: string): string => {
   // console.log(`${baseImageUrl}${path}`);

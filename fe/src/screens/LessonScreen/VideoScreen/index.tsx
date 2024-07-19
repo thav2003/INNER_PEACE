@@ -9,6 +9,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import socket from "~/socket";
 import { useAuthStore } from "~/stores/auth.store";
 import { useAppStore } from "~/stores/app.store";
+import { useSocket } from "~/hooks/useSocket";
 type Props = NativeStackScreenProps<AppParamList, "LESSON_VIDEO">;
 const VideoScreen: React.FC<Props> = ({ navigation, route }) => {
   const refetchApp = useAppStore((state) => state.refetchApp);
@@ -17,27 +18,40 @@ const VideoScreen: React.FC<Props> = ({ navigation, route }) => {
   const video = useRef(null);
   const [current, setCurrent] = useState(currentTime ? currentTime : 0);
 
+  const { isConnected, socket } = useSocket({
+    lessonId: lessonId,
+    userId: userId,
+    roomType: "VIDEO",
+  });
+
   const handlePlaybackStatusUpdate = (status: AVPlaybackStatus) => {
     if (status.isLoaded && status.isPlaying) {
       setCurrent(status.positionMillis);
-      socket.emit("updateVideoTime", {
-        lessonId: lessonId,
-        userId: userId,
-        currentTimeMillis: status.positionMillis,
-      });
+      if (isConnected) {
+        socket?.emit("updateVideoTime", {
+          lessonId: lessonId,
+          userId: userId,
+          currentTimeMillis: status.positionMillis,
+        });
+      }
     }
   };
-  useEffect(() => {
-    if (socket.disconnected) {
-      socket.connect();
-    }
-    socket.emit("joinVideoRoom", { lessonId: lessonId, userId: userId });
 
+  useEffect(() => {
+    if (isConnected) {
+      socket?.emit("joinRoom", {
+        lessonId: lessonId,
+        userId: userId,
+        roomType: "VIDEO",
+      });
+    }
+  }, [isConnected]);
+
+  useEffect(() => {
     return () => {
       refetchApp();
     };
   }, []);
-  console.log(current);
   return (
     <View style={styles.backgroundVideo}>
       <View>

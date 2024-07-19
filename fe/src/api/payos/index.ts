@@ -13,10 +13,10 @@ export async function createPaymentLink(formValue: {
 }) {
   const accessToken = getState().accessToken;
   try {
-    console.log(`${SERVER_URL}/api/v1/payment/create`);
+    console.log(`${process.env.EXPO_PUBLIC_API_URL}/api/v1/payment/create`);
     let res = await axios({
       method: "POST",
-      url: `${SERVER_URL}/api/v1/payment/create`,
+      url: `${process.env.EXPO_PUBLIC_API_URL}/api/v1/payment/create`,
       data: formValue,
       headers: {
         "Content-Type": "application/json",
@@ -34,7 +34,7 @@ export async function getOrder(orderId: string) {
   try {
     let res = await axios({
       method: "GET",
-      url: `${SERVER_URL}/api/v1/payment/${orderId}`,
+      url: `${process.env.EXPO_PUBLIC_API_URL}/api/v1/payment/${orderId}`,
       headers: {
         "Content-Type": "application/json",
       },
@@ -49,7 +49,7 @@ export async function getBanksList() {
   try {
     let res = await axios({
       method: "GET",
-      url: VIETQR_URL,
+      url: `${process.env.EXPO_PUBLIC_VIETQR_URL}`,
       headers: {
         "Content-Type": "application/json",
       },
@@ -63,7 +63,7 @@ export async function cancelOrder(orderId: number) {
   try {
     const res = await axios({
       method: "PUT",
-      url: `${SERVER_URL}/api/v1/payment/${orderId}`,
+      url: `${process.env.EXPO_PUBLIC_API_URL}/api/v1/payment/${orderId}`,
       headers: {
         "Content-Type": "application/json",
       },

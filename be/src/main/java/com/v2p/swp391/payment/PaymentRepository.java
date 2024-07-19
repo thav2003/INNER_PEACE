@@ -5,10 +5,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface PaymentRepository extends JpaRepository<PaymentEntity,Long> {
+
     @Query("SELECT p FROM PaymentEntity p " +
             "WHERE p.status = 'PENDING' " +
             "AND p.user.id = :userId " +
@@ -20,4 +23,5 @@ public interface PaymentRepository extends JpaRepository<PaymentEntity,Long> {
             @Param("packages") String packages);
 
     Optional<PaymentEntity> findByOrderCode(int orderCode);
+    List<PaymentEntity> findAllByTransactionDateBetween(LocalDateTime start, LocalDateTime end);
 }

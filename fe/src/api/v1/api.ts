@@ -126,7 +126,8 @@ export interface CreateUserRequest {
 export const CreateUserRequestRoleEnum = {
     Admin: 'ADMIN',
     Manager: 'MANAGER',
-    Customer: 'CUSTOMER'
+    Customer: 'CUSTOMER',
+    Professional: 'PROFESSIONAL'
 } as const;
 
 export type CreateUserRequestRoleEnum = typeof CreateUserRequestRoleEnum[keyof typeof CreateUserRequestRoleEnum];
@@ -196,49 +197,6 @@ export interface DailyMealPlanResponse {
 /**
  * 
  * @export
- * @interface LessonCategoryEntity
- */
-export interface LessonCategoryEntity {
-    /**
-     * 
-     * @type {string}
-     * @memberof LessonCategoryEntity
-     */
-    'createdAt'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof LessonCategoryEntity
-     */
-    'updatedAt'?: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof LessonCategoryEntity
-     */
-    'id'?: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof LessonCategoryEntity
-     */
-    'name'?: string;
-    /**
-     * 
-     * @type {LessonCategoryEntity}
-     * @memberof LessonCategoryEntity
-     */
-    'parent'?: LessonCategoryEntity;
-    /**
-     * 
-     * @type {Set<LessonCategoryEntity>}
-     * @memberof LessonCategoryEntity
-     */
-    'children'?: Set<LessonCategoryEntity>;
-}
-/**
- * 
- * @export
  * @interface LessonDto
  */
 export interface LessonDto {
@@ -284,67 +242,6 @@ export interface LessonDto {
      * @memberof LessonDto
      */
     'categories'?: Array<string>;
-}
-/**
- * 
- * @export
- * @interface LessonEntity
- */
-export interface LessonEntity {
-    /**
-     * 
-     * @type {string}
-     * @memberof LessonEntity
-     */
-    'createdAt'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof LessonEntity
-     */
-    'updatedAt'?: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof LessonEntity
-     */
-    'id'?: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof LessonEntity
-     */
-    'name'?: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof LessonEntity
-     */
-    'duration'?: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof LessonEntity
-     */
-    'description'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof LessonEntity
-     */
-    'imgUrl'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof LessonEntity
-     */
-    'videoUrl'?: string;
-    /**
-     * 
-     * @type {Array<LessonCategoryEntity>}
-     * @memberof LessonEntity
-     */
-    'categories'?: Array<LessonCategoryEntity>;
 }
 /**
  * 
@@ -473,6 +370,49 @@ export interface MealDto {
 /**
  * 
  * @export
+ * @interface MessageDto
+ */
+export interface MessageDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof MessageDto
+     */
+    'id'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof MessageDto
+     */
+    'senderId'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof MessageDto
+     */
+    'senderName'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof MessageDto
+     */
+    'receiverId'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof MessageDto
+     */
+    'receiverName'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MessageDto
+     */
+    'content'?: string;
+}
+/**
+ * 
+ * @export
  * @interface Nutrient
  */
 export interface Nutrient {
@@ -541,6 +481,43 @@ export interface PagedResponseLessonDto {
 /**
  * 
  * @export
+ * @interface PagedResponseRoomDto
+ */
+export interface PagedResponseRoomDto {
+    /**
+     * 
+     * @type {Array<RoomDto>}
+     * @memberof PagedResponseRoomDto
+     */
+    'content'?: Array<RoomDto>;
+    /**
+     * 
+     * @type {number}
+     * @memberof PagedResponseRoomDto
+     */
+    'page'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PagedResponseRoomDto
+     */
+    'size'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PagedResponseRoomDto
+     */
+    'totalElements'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PagedResponseRoomDto
+     */
+    'totalPages'?: number;
+}
+/**
+ * 
+ * @export
  * @interface PagedResponseUserLessonResponse
  */
 export interface PagedResponseUserLessonResponse {
@@ -583,6 +560,12 @@ export interface PagedResponseUserLessonResponse {
 export interface PaymentRequest {
     /**
      * 
+     * @type {number}
+     * @memberof PaymentRequest
+     */
+    'userId'?: number;
+    /**
+     * 
      * @type {string}
      * @memberof PaymentRequest
      */
@@ -611,6 +594,31 @@ export interface PaymentRequest {
      * @memberof PaymentRequest
      */
     'cancelUrl'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PaymentRequest
+     */
+    'packages'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface RoomDto
+ */
+export interface RoomDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof RoomDto
+     */
+    'id'?: number;
+    /**
+     * 
+     * @type {Array<UserDto>}
+     * @memberof RoomDto
+     */
+    'users'?: Array<UserDto>;
 }
 /**
  * 
@@ -721,10 +729,46 @@ export interface UpdateUserRequest {
 export const UpdateUserRequestRoleEnum = {
     Admin: 'ADMIN',
     Manager: 'MANAGER',
-    Customer: 'CUSTOMER'
+    Customer: 'CUSTOMER',
+    Professional: 'PROFESSIONAL'
 } as const;
 
 export type UpdateUserRequestRoleEnum = typeof UpdateUserRequestRoleEnum[keyof typeof UpdateUserRequestRoleEnum];
+
+/**
+ * 
+ * @export
+ * @interface UserDto
+ */
+export interface UserDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof UserDto
+     */
+    'id'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserDto
+     */
+    'name'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserDto
+     */
+    'role'?: UserDtoRoleEnum;
+}
+
+export const UserDtoRoleEnum = {
+    Admin: 'ADMIN',
+    Manager: 'MANAGER',
+    Customer: 'CUSTOMER',
+    Professional: 'PROFESSIONAL'
+} as const;
+
+export type UserDtoRoleEnum = typeof UserDtoRoleEnum[keyof typeof UserDtoRoleEnum];
 
 /**
  * 
@@ -771,10 +815,10 @@ export interface UserLessonResponse {
     'id'?: number;
     /**
      * 
-     * @type {LessonEntity}
+     * @type {LessonDto}
      * @memberof UserLessonResponse
      */
-    'lesson'?: LessonEntity;
+    'lesson'?: LessonDto;
     /**
      * 
      * @type {number}
@@ -859,7 +903,8 @@ export interface UserResponse {
 export const UserResponseRoleEnum = {
     Admin: 'ADMIN',
     Manager: 'MANAGER',
-    Customer: 'CUSTOMER'
+    Customer: 'CUSTOMER',
+    Professional: 'PROFESSIONAL'
 } as const;
 
 export type UserResponseRoleEnum = typeof UserResponseRoleEnum[keyof typeof UserResponseRoleEnum];
@@ -2314,6 +2359,39 @@ export const PaymentControllerApiAxiosParamCreator = function (configuration?: C
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMonthlyRevenue: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v1/payment/monthly-revenue`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Bearer_Authentication required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {number} orderId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2323,6 +2401,72 @@ export const PaymentControllerApiAxiosParamCreator = function (configuration?: C
             assertParamExists('getOrderById', 'orderId', orderId)
             const localVarPath = `/api/v1/payment/{orderId}`
                 .replace(`{${"orderId"}}`, encodeURIComponent(String(orderId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Bearer_Authentication required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getTodayDashboard: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v1/payment/today`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Bearer_Authentication required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getWeeklyRevenue: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v1/payment/weekly-revenue`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2436,6 +2580,17 @@ export const PaymentControllerApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getMonthlyRevenue(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<number>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMonthlyRevenue(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PaymentControllerApi.getMonthlyRevenue']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @param {number} orderId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2444,6 +2599,28 @@ export const PaymentControllerApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getOrderById(orderId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['PaymentControllerApi.getOrderById']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getTodayDashboard(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getTodayDashboard(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PaymentControllerApi.getTodayDashboard']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getWeeklyRevenue(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<number>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getWeeklyRevenue(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PaymentControllerApi.getWeeklyRevenue']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -2497,12 +2674,36 @@ export const PaymentControllerApiFactory = function (configuration?: Configurati
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMonthlyRevenue(options?: any): AxiosPromise<Array<number>> {
+            return localVarFp.getMonthlyRevenue(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {number} orderId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         getOrderById(orderId: number, options?: any): AxiosPromise<object> {
             return localVarFp.getOrderById(orderId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getTodayDashboard(options?: any): AxiosPromise<object> {
+            return localVarFp.getTodayDashboard(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getWeeklyRevenue(options?: any): AxiosPromise<Array<number>> {
+            return localVarFp.getWeeklyRevenue(options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2558,6 +2759,16 @@ export class PaymentControllerApi extends BaseAPI {
 
     /**
      * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PaymentControllerApi
+     */
+    public getMonthlyRevenue(options?: RawAxiosRequestConfig) {
+        return PaymentControllerApiFp(this.configuration).getMonthlyRevenue(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @param {number} orderId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2565,6 +2776,26 @@ export class PaymentControllerApi extends BaseAPI {
      */
     public getOrderById(orderId: number, options?: RawAxiosRequestConfig) {
         return PaymentControllerApiFp(this.configuration).getOrderById(orderId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PaymentControllerApi
+     */
+    public getTodayDashboard(options?: RawAxiosRequestConfig) {
+        return PaymentControllerApiFp(this.configuration).getTodayDashboard(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PaymentControllerApi
+     */
+    public getWeeklyRevenue(options?: RawAxiosRequestConfig) {
+        return PaymentControllerApiFp(this.configuration).getWeeklyRevenue(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2767,6 +2998,202 @@ export class ProfileControllerApi extends BaseAPI {
      */
     public updateProfile(fullName?: string, phoneNumber?: string, imgFile?: File, options?: RawAxiosRequestConfig) {
         return ProfileControllerApiFp(this.configuration).updateProfile(fullName, phoneNumber, imgFile, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * RoomControllerApi - axios parameter creator
+ * @export
+ */
+export const RoomControllerApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMessages: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('getMessages', 'id', id)
+            const localVarPath = `/api/v1/rooms/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Bearer_Authentication required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} userId 
+         * @param {number} [page] 
+         * @param {number} [size] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getRoomsByUserId: async (userId: number, page?: number, size?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'userId' is not null or undefined
+            assertParamExists('getRoomsByUserId', 'userId', userId)
+            const localVarPath = `/api/v1/rooms`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Bearer_Authentication required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (userId !== undefined) {
+                localVarQueryParameter['userId'] = userId;
+            }
+
+            if (page !== undefined) {
+                localVarQueryParameter['page'] = page;
+            }
+
+            if (size !== undefined) {
+                localVarQueryParameter['size'] = size;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * RoomControllerApi - functional programming interface
+ * @export
+ */
+export const RoomControllerApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = RoomControllerApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getMessages(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MessageDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMessages(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['RoomControllerApi.getMessages']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {number} userId 
+         * @param {number} [page] 
+         * @param {number} [size] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getRoomsByUserId(userId: number, page?: number, size?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PagedResponseRoomDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getRoomsByUserId(userId, page, size, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['RoomControllerApi.getRoomsByUserId']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * RoomControllerApi - factory interface
+ * @export
+ */
+export const RoomControllerApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = RoomControllerApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMessages(id: number, options?: any): AxiosPromise<Array<MessageDto>> {
+            return localVarFp.getMessages(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} userId 
+         * @param {number} [page] 
+         * @param {number} [size] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getRoomsByUserId(userId: number, page?: number, size?: number, options?: any): AxiosPromise<PagedResponseRoomDto> {
+            return localVarFp.getRoomsByUserId(userId, page, size, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * RoomControllerApi - object-oriented interface
+ * @export
+ * @class RoomControllerApi
+ * @extends {BaseAPI}
+ */
+export class RoomControllerApi extends BaseAPI {
+    /**
+     * 
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomControllerApi
+     */
+    public getMessages(id: number, options?: RawAxiosRequestConfig) {
+        return RoomControllerApiFp(this.configuration).getMessages(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} userId 
+     * @param {number} [page] 
+     * @param {number} [size] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomControllerApi
+     */
+    public getRoomsByUserId(userId: number, page?: number, size?: number, options?: RawAxiosRequestConfig) {
+        return RoomControllerApiFp(this.configuration).getRoomsByUserId(userId, page, size, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

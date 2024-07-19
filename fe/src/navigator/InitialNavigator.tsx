@@ -9,6 +9,7 @@ import LoginScreen from "~/screens/LoginScreen";
 import RegisterScreen from "~/screens/RegisterScreen";
 import WelcomeScreen from "~/screens/WelcomeScreen";
 import React from "react";
+import ManagerNavigator, { ManagerParamList } from "./ManagerNavigator";
 
 export type InitialStackParamList = {
   SPLASH: undefined;
@@ -19,17 +20,18 @@ export type InitialStackParamList = {
   REGISTER: undefined;
   WELCOME: undefined;
   APP: NavigatorScreenParams<AppParamList>;
+  MANAGER: NavigatorScreenParams<ManagerParamList>;
 };
 const Stack = createNativeStackNavigator<InitialStackParamList>();
 const InitialNavigator: React.FC = () => {
   return (
     <Stack.Navigator
       screenOptions={{ headerShown: false }}
-      initialRouteName="SPLASH"
+      initialRouteName="MANAGER"
     >
       <Stack.Screen name="SPLASH" component={SplashScreen} />
       <Stack.Screen name="APP" component={AppNavigator} />
-
+      <Stack.Screen name="MANAGER" component={ManagerNavigator} />
       <Stack.Screen name="WELCOME" component={WelcomeScreen} />
       <Stack.Screen name="LOGIN" component={LoginScreen} />
       <Stack.Screen name="REGISTER" component={RegisterScreen} />

@@ -1,7 +1,6 @@
 package com.v2p.swp391.websocket;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.v2p.swp391.common.socket.NotifyOnPaymentUpdate;
 import com.v2p.swp391.payment.type.PaymentData;
 import com.v2p.swp391.websocket.SocketIOService;
 import jakarta.servlet.http.HttpServletRequest;

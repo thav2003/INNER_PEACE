@@ -6,6 +6,8 @@ import {
   UserControllerApi,
   StringResponse,
   DailyMealPlanControllerApi,
+  RoomControllerApi,
+  PaymentControllerApi,
 } from "./v1";
 import {
   Configuration,
@@ -30,6 +32,8 @@ const authApi = new AuthControllerApi();
 const userApi = new UserControllerApi();
 const lessonControllerApi = new LessonControllerApi();
 const dailyMealPlanControllerApi = new DailyMealPlanControllerApi();
+const roomControllerApi = new RoomControllerApi();
+const paymentControllerApi = new PaymentControllerApi();
 
 const defaultApi = new DefaultApi(config);
 const ingredientsApi = new IngredientsApi(config);
@@ -45,6 +49,8 @@ type AuthApiType = typeof authApi;
 type UserApiType = typeof userApi;
 type LessonApiType = typeof lessonControllerApi;
 type DailyMealPlanApi = typeof dailyMealPlanControllerApi;
+type RoomApi = typeof roomControllerApi;
+type PaymentApi = typeof paymentControllerApi;
 
 type DefaultApiType = typeof defaultApi;
 type IngredientsApiType = typeof ingredientsApi;
@@ -59,7 +65,9 @@ type ApiType = AuthApiType &
   UserApiType &
   ProfileApiType &
   LessonApiType &
-  DailyMealPlanApi;
+  DailyMealPlanApi &
+  RoomApi &
+  PaymentApi;
 
 type SpoonacularApiType = DefaultApiType &
   IngredientsApiType &
@@ -71,20 +79,18 @@ type SpoonacularApiType = DefaultApiType &
   WineApiType;
 
 const mergeApis = (...apis: BaseAPI[]): ApiType => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const mergedApi: any = {};
+  const mergedApi = {} as ApiType;
   apis.forEach((api) => {
     const proto = Object.getPrototypeOf(api);
     const keys = Object.getOwnPropertyNames(proto);
 
     keys.forEach((key) => {
-      // Kiểm tra xem thuộc tính có phải là một phương thức không
       if (key !== "constructor") {
         const descriptor = Object.getOwnPropertyDescriptor(proto, key);
         if (descriptor && typeof descriptor.value === "function") {
-          mergedApi[key] = descriptor.value.bind(api);
-        } else if (!mergedApi[key]) {
-          mergedApi[key] = api[key];
+          mergedApi[key as keyof ApiType] = descriptor.value.bind(api);
+        } else if (!mergedApi[key as keyof ApiType]) {
+          mergedApi[key as keyof ApiType] = api[key as keyof typeof api];
         }
       }
     });
@@ -119,7 +125,9 @@ const api: ApiType = mergeApis(
   userApi,
   profileApi,
   lessonControllerApi,
-  dailyMealPlanControllerApi
+  dailyMealPlanControllerApi,
+  roomControllerApi,
+  paymentControllerApi
 );
 export const spoonacularApi: SpoonacularApiType = mergeSpoonacularApis(
   defaultApi,

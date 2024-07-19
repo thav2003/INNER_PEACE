@@ -5,9 +5,9 @@ import {
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { memo, useMemo } from "react";
 import { TouchableOpacity, Image, View, Text, Alert } from "react-native";
-import { LessonDto, LessonEntity, UserLessonResponse } from "~/api/v1";
+import { LessonDto, UserLessonResponse } from "~/api/v1";
 import { AppParamList } from "~/navigator/AppNavigator";
-import { HomeParamList } from "~/navigator/HomeNavigator";
+import { HomeParamList } from "~/navigator/AppTabNavigator";
 import { useAuthStore } from "~/stores/auth.store";
 import { formatImageUrl } from "~/utils/image";
 

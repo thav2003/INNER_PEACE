@@ -1,7 +1,7 @@
 spring:
   jpa:
     defer-datasource-initialization: true
-    show-sql: true
+#    show-sql: true
     hibernate:
       ddl-auto: create-drop
       naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
@@ -18,10 +18,6 @@ springdoc:
   swagger-ui:
     operationsSorter: method
 
-
-ngrok:
-  enabled: true
-  authToken: 2ApRl0B2Tv5lMZ57mLhhxcwAN9X_6zwoinvhZAAX4sPNcbvbX
 
 app:
   api:

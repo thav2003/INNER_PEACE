@@ -21,7 +21,7 @@ import ListView from "~/components/ListView";
 import Header from "~/components/Header";
 //   import FlexMediationList from "~/components/FlexMediationList";
 import { Icon } from "@rneui/themed";
-import { HomeParamList } from "~/navigator/HomeNavigator";
+import { HomeParamList } from "~/navigator/AppTabNavigator";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import MainLayout from "~/layouts/MainLayout";
 import useFetch from "~/hooks/useFetch";
@@ -29,7 +29,7 @@ import api from "~/api";
 import { useAuthStore } from "~/stores/auth.store";
 import { formatImageUrl } from "~/utils/image";
 import ListLessonItem from "~/components/ListLessonItem";
-import { LessonDto, LessonEntity } from "~/api/v1";
+import { LessonDto } from "~/api/v1";
 import axios from "axios";
 
 type Props = NativeStackScreenProps<HomeParamList, "MEDIATION_TAB">;

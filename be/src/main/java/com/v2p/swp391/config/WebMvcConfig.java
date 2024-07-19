@@ -14,7 +14,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     private final long MAX_AGE_SECS = 3600;
     private final PaymentUpdateInterceptor paymentUpdateInterceptor;
-
     @Autowired
     public WebMvcConfig(PaymentUpdateInterceptor paymentUpdateInterceptor) {
         this.paymentUpdateInterceptor = paymentUpdateInterceptor;
@@ -36,6 +35,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/uploads/**")
                 .addResourceLocations("file:uploads/");
     }
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(paymentUpdateInterceptor);

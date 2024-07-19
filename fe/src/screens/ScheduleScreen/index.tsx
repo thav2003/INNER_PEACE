@@ -14,7 +14,7 @@ import { colors } from "../../utils/colors";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import MainLayout from "~/layouts/MainLayout";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { HomeParamList } from "~/navigator/HomeNavigator";
+import { HomeParamList } from "~/navigator/AppTabNavigator";
 import Header from "~/components/Header";
 import { CompositeScreenProps, Theme } from "@react-navigation/native";
 import { AppParamList } from "~/navigator/AppNavigator";
@@ -289,14 +289,14 @@ const ScheduleScreen: React.FC<Props> = ({ navigation, route }) => {
                 <Text className="text-[#3F54DB]">
                   Thời gian nấu: {item.readyInMinutes} phút
                 </Text>
-                <RenderHtml
+                {/* <RenderHtml
                   contentWidth={Dimensions.get("screen").width}
                   source={{
                     html: wrapHTMLInBody(item.summary),
                   }}
                   renderers={renderers}
                   customHTMLElementModels={customHTMLElementModels()}
-                />
+                /> */}
               </TouchableOpacity>
             </View>
           )}

@@ -6,20 +6,25 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.v2p.swp391.application.model.UserEntity;
 import com.v2p.swp391.application.repository.UserRepository;
-import com.v2p.swp391.common.socket.NotifyOnPaymentUpdate;
 import com.v2p.swp391.exception.ResourceNotFoundException;
 import com.v2p.swp391.payment.type.ItemData;
 import com.v2p.swp391.payment.type.PaymentData;
+import com.v2p.swp391.websocket.NotifyOnPaymentUpdate;
 import com.v2p.swp391.websocket.SocketIOService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Slf4j
 @RestController
@@ -30,6 +35,72 @@ public class PaymentController {
     private final PaymentRepository paymentRepository;
     private final UserRepository userRepository;
     private final SocketIOService socketIOService;
+
+    @GetMapping("/today")
+    public ObjectNode getTodayDashboard() {
+        LocalDate today = LocalDate.now();
+        LocalDate yesterday = today.minusDays(1);
+
+        LocalDateTime startOfDay = today.atStartOfDay();
+        LocalDateTime endOfDay = today.atTime(LocalTime.MAX);
+
+        LocalDateTime startOfYesterday = yesterday.atStartOfDay();
+        LocalDateTime endOfYesterday = yesterday.atTime(LocalTime.MAX);
+
+        // Lấy danh sách payments hôm nay
+        List<PaymentEntity> paymentsToday = paymentRepository.findAllByTransactionDateBetween(startOfDay, endOfDay);
+        List<PaymentEntity> paymentsYesterday = paymentRepository.findAllByTransactionDateBetween(startOfYesterday, endOfYesterday);
+
+        double revenueToday = paymentsToday.stream().mapToDouble(PaymentEntity::getAmount).sum();
+        int paymentCountToday = paymentsToday.size();
+
+        double revenueYesterday = paymentsYesterday.stream().mapToDouble(PaymentEntity::getAmount).sum();
+
+        // Tính lợi nhuận theo phần trăm so với ngày hôm trước
+        double revenueChangePercent = revenueYesterday == 0 ? 0 : ((revenueToday - revenueYesterday) / revenueYesterday) * 100;
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectNode respon = objectMapper.createObjectNode();
+        respon.put("revenueToday",revenueToday);
+        respon.put("profitToday",revenueChangePercent);
+        respon.put("paymentCountToday",paymentCountToday);
+        return respon;
+
+    }
+    @GetMapping("/monthly-revenue")
+    public List<Double> getMonthlyRevenue() {
+        int year = LocalDate.now().getYear();
+        LocalDate startOfYear = LocalDate.of(year, 1, 1);
+        LocalDate endOfYear = LocalDate.of(year, 12, 31);
+
+        List<PaymentEntity> payments = paymentRepository.findAllByTransactionDateBetween(startOfYear.atStartOfDay(), endOfYear.atTime(LocalTime.MAX));
+
+        Map<Integer, Double> revenueByMonth = payments.stream()
+                .collect(Collectors.groupingBy(payment -> payment.getTransactionDate().getMonthValue(),
+                        Collectors.summingDouble(PaymentEntity::getAmount)));
+
+        return IntStream.rangeClosed(1, 12)
+                .mapToObj(month -> revenueByMonth.getOrDefault(month, 0.0))
+                .collect(Collectors.toList());
+    }
+    @GetMapping("/weekly-revenue")
+    public List<Double> getWeeklyRevenue() {
+        LocalDate today = LocalDate.now();
+        LocalDate startOfWeek = today.with(DayOfWeek.MONDAY);
+        LocalDate endOfWeek = today.with(DayOfWeek.SUNDAY);
+
+        List<PaymentEntity> payments = paymentRepository.findAllByTransactionDateBetween(startOfWeek.atStartOfDay(), endOfWeek.atTime(LocalTime.MAX));
+
+        Map<DayOfWeek, Double> revenueByDay = payments.stream()
+                .collect(Collectors.groupingBy(payment -> payment.getTransactionDate().getDayOfWeek(),
+                        Collectors.summingDouble(PaymentEntity::getAmount)));
+
+        return Arrays.stream(DayOfWeek.values())
+                .map(day -> revenueByDay.getOrDefault(day, 0.0))
+                .collect(Collectors.toList());
+    }
+
+
     @PostMapping(path = "/create")
     public ObjectNode createPaymentLink(@RequestBody PaymentRequest RequestBody) {
         ObjectMapper objectMapper = new ObjectMapper();

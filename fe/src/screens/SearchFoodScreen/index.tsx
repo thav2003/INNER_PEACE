@@ -15,7 +15,7 @@ import axios from "axios";
 import { formatImageUrl } from "~/utils/image";
 import ListFoodItem from "~/components/ListFoodItem";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { HomeParamList } from "~/navigator/HomeNavigator";
+import { HomeParamList } from "~/navigator/AppTabNavigator";
 import { AppParamList } from "~/navigator/AppNavigator";
 
 export interface SearchResultBase {
