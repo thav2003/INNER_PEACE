@@ -107,10 +107,10 @@ const ListLessonItem: React.FC<{
         />
         {showDetail && (
           <>
-            <Text className="font-bold text-lg text-[#3F54DB]">
+            <Text className="line-clamp-2 font-bold text-lg text-[#3F54DB]">
               {item.name}
             </Text>
-            <Text className="text-[#3F54DB]">{item.description}</Text>
+            <Text className="text-[#3F54DB]">{`Thời gian: ${item.duration} phút`}</Text>
           </>
         )}
       </TouchableOpacity>

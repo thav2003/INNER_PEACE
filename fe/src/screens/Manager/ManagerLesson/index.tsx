@@ -131,6 +131,11 @@ const ListLessonScreen: React.FC<Props> = ({ navigation }) => {
       console.log("Upload successful:", result);
       Alert.alert("Thông báo", "Thêm thành công");
       refetchApp();
+      setName("");
+      setDescription("");
+      setDuration("");
+      setImage(undefined);
+      hideModal();
     } catch (error) {
       const err = error as AxiosError;
       console.log("Upload failed:", err.response?.data);
@@ -143,7 +148,7 @@ const ListLessonScreen: React.FC<Props> = ({ navigation }) => {
     <PaperProvider>
       <Portal>
         <Modal
-          style={{ top: 10 }}
+          style={{ top: 0, marginTop: 0 }}
           visible={visible}
           onDismiss={hideModal}
           contentContainerStyle={containerStyle}
@@ -156,7 +161,7 @@ const ListLessonScreen: React.FC<Props> = ({ navigation }) => {
             {!image && (
               <TouchableOpacity onPress={pickImage}>
                 <View
-                  style={{ backgroundColor: colors.grey, height: 100 }}
+                  style={{ backgroundColor: colors.grey, height: 80 }}
                   className="items-center justify-center rounded-lg"
                 >
                   <Text className="text-center">Hình ảnh</Text>
@@ -271,10 +276,7 @@ const ListLessonScreen: React.FC<Props> = ({ navigation }) => {
                   />
                   <Card.Content>
                     <TextPaper variant="titleLarge">{`${item.duration} phút`}</TextPaper>
-                    <TextPaper
-                      variant="bodyMedium"
-                      className="line-clamp-2"
-                    >{`${item.description}`}</TextPaper>
+                    <Text numberOfLines={3}>{`${item.description}`}</Text>
                   </Card.Content>
                   <TouchableOpacity
                     onPress={() => handleDelete(item.id)}
